@@ -1,19 +1,29 @@
 package jobqueue;
 
 import java.util.List;
+
 import job.Job;
+
 public class jobQueue {
-    List<Job> Queue_run;
-    List<Job> Queue_wait;
+    List<Job> Queue;
+
     String Name;
     int All_container;
     int Used_container;
     int Left_container;
 
 
-    public jobQueue(String name,int all_container){
+    public jobQueue(String name, int all_container) {
         this.Name = name;
         this.All_container = all_container;
+    }
+
+    public jobQueue(String name) {
+        this.Name = name;
+    }
+
+    public void setAll_container(int all_container) {
+        All_container = all_container;
     }
 
     public int getUsed_container() {
@@ -28,11 +38,9 @@ public class jobQueue {
         return Left_container;
     }
 
-    public List<Job> getQueue_run() {
-        return Queue_run;
+    public List<Job> getQueue() {
+        return Queue;
     }
 
-    public List<Job> getQueue_wait() {
-        return Queue_wait;
-    }
+
 }
