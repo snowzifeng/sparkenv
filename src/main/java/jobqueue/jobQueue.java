@@ -5,8 +5,8 @@ import java.util.List;
 import job.Job;
 
 public class jobQueue {
-    List<Job> Queue;
-
+    List<Job> Queue_run;
+    List<Job> Queue_wait;
     String Name;
     int All_container;
     int Used_container;
@@ -38,9 +38,11 @@ public class jobQueue {
         return Left_container;
     }
 
-    public List<Job> getQueue() {
-        return Queue;
+    public List<Job> getQueue_run() {
+        return Queue_run;
     }
 
-
+    public List<Job> getQueue_wait() {
+        return Queue_wait;
+    }
 }
