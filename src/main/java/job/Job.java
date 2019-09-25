@@ -1,6 +1,6 @@
 package job;
 
-public class job {
+public class Job {
     int container = 0;
     int maxcontainer = 0;
     int allocatedcontainer = 0;
