@@ -1,6 +1,8 @@
 package job;
 
-public class Job {
+import java.util.Comparator;
+
+public class Job implements Comparable<Job> {
     int container = 0;
     int maxcontainer = 0;
     int allocatedcontainer = 0;
@@ -8,8 +10,14 @@ public class Job {
     int worktime;
     int worktime_left;
 
+
     public int getContainer() {
         return container;
+    }
+
+    public int compareTo(Job o) {
+        return this.worktime_left > o.worktime_left ? 1 : (this.worktime_left == o.worktime_left ? 0 : -1);
+
     }
 
     public int getMaxcontainer() {

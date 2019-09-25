@@ -23,15 +23,12 @@ public class capacityscheduler extends abstractscheduler {
         return null;
     }
 
-
-
     public void doAction(String action) {
 
     }
 
     void addJob(int index, Job job) {
         jobQueue queue = queueList.get(index);
-
-
+        queue.add(job);
     }
 }

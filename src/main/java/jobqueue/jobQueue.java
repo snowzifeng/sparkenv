@@ -12,7 +12,6 @@ public class jobQueue {
     int Used_container;
     int Left_container;
 
-
     public jobQueue(String name, int all_container) {
         this.Name = name;
         this.All_container = all_container;
@@ -21,6 +20,11 @@ public class jobQueue {
     public jobQueue(String name) {
         this.Name = name;
     }
+
+    public void add(Job job){
+        Queue_wait.add(job);
+    }
+
 
     public void setAll_container(int all_container) {
         All_container = all_container;
