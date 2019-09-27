@@ -1,21 +1,21 @@
 package scheduler;
 
 import job.Job;
-import jobqueue.jobQueue;
+import jobqueue.JobQueue;
 
 
-public class capacityscheduler extends abstractscheduler {
+public class CapacityScheduler extends AbstractScheduler {
 
     int Container;
 
-    public capacityscheduler(int containerNumber) {
+    public CapacityScheduler(int containerNumber) {
         this.Container = containerNumber;
     }
 
     public void initQueue(String[] name, int[] container) {
 
         for (int i = 0; i < name.length; i++) {
-            jobQueue queue = new jobQueue(name[i], container[i]);
+            JobQueue queue = new JobQueue(name[i], container[i]);
         }
     }
 
@@ -28,7 +28,7 @@ public class capacityscheduler extends abstractscheduler {
     }
 
     void addJob(int index, Job job) {
-        jobQueue queue = queueList.get(index);
+        JobQueue queue = queueList.get(index);
         queue.add(job);
     }
 }

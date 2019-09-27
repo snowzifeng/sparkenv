@@ -1,14 +1,29 @@
 package job;
 
-import java.util.Comparator;
-
 public class Job implements Comparable<Job> {
     int container = 0;
-    int maxcontainer = 0;
-    int allocatedcontainer = 0;
-    String queuename;
+    int maxContainer = 0;
+    int allocatedContainer = 0;
+    String queueName;
     int worktime;
-    int worktime_left;
+    int worktimeLeft;
+    int fullWorkload;
+    int basetime;
+    boolean finishStartPart;
+
+    public Job(int maxContainer, int basetime, int worktime) {
+        this.basetime = basetime;
+        this.maxContainer = maxContainer;
+        this.basetime = basetime;
+        this.fullWorkload = maxContainer * worktime;
+        this.worktime = worktime + basetime;
+        this.worktimeLeft = worktime + basetime;
+        this.finishStartPart = false;
+
+        this.container = 0;
+
+
+    }
 
 
     public int getContainer() {
@@ -16,51 +31,91 @@ public class Job implements Comparable<Job> {
     }
 
     public int compareTo(Job o) {
-        return this.worktime_left > o.worktime_left ? 1 : (this.worktime_left == o.worktime_left ? 0 : -1);
+        return this.worktimeLeft > o.worktimeLeft ? 1 : (this.worktimeLeft == o.worktimeLeft ? 0 : -1);
 
     }
 
-    public int getMaxcontainer() {
-        return maxcontainer;
+    public int getMaxContainer() {
+        return maxContainer;
     }
 
-    public int getAllocatedcontainer() {
-        return allocatedcontainer;
+    public int getAllocatedContainer() {
+        return allocatedContainer;
     }
 
-    public String getQueuename() {
-        return queuename;
+    public String getQueueName() {
+        return queueName;
     }
 
     public int getWorktime() {
         return worktime;
     }
 
-    public int getWorktime_left() {
-        return worktime_left;
+    public int getWorktimeLeft() {
+        return worktimeLeft;
     }
 
     public void setContainer(int container) {
-        this.container = container;
+//        System.out.println("start : "+this.getWorktimeLeft());
+        if (this.finishStartPart) {
+            this.fullWorkload = this.worktimeLeft * this.container;
+            this.container = container;
+            this.worktimeLeft = (this.fullWorkload + this.container - 1) / this.container;
+
+        } else {
+            if (this.worktime - this.worktimeLeft >= this.basetime) {
+                if (this.container == 0) {
+                    this.finishStartPart = true;
+                    this.worktimeLeft = this.worktimeLeft * this.maxContainer / container;
+                    this.container = container;
+                    return;
+                }
+//                System.out.println("basetime: "+this.basetime+" worktime: "+this.worktime+" worktimeleft: "+this.worktimeLeft);
+                this.finishStartPart = true;
+
+                this.worktimeLeft = this.worktimeLeft * this.container / container;
+
+                this.container = container;
+//                System.out.println("end : "+ this.getWorktimeLeft());
+
+            } else {
+                int passTime = this.basetime - (this.worktime - this.worktimeLeft);
+                if (this.container == 0) {
+
+                    this.worktimeLeft = (this.worktime - this.basetime) * this.maxContainer / container + this.worktimeLeft - (this.worktime - this.basetime);
+                    this.container = container;
+
+                } else {
+                    this.worktimeLeft = (this.worktime - this.basetime) * this.container / container + this.worktimeLeft - (this.worktime - this.basetime);
+                    this.container = container;
+                }
+                this.basetime = passTime;
+//                System.out.println("passtime : "+passTime);
+                this.worktime = this.worktimeLeft;
+
+            }
+        }
+
+
     }
 
-    public void setMaxcontainer(int maxcontainer) {
-        this.maxcontainer = maxcontainer;
+    public void setMaxContainer(int maxContainer) {
+        this.maxContainer = maxContainer;
     }
 
     public void setAllocatedcontainer(int allocatedcontainer) {
-        this.allocatedcontainer = allocatedcontainer;
+        this.allocatedContainer = allocatedcontainer;
     }
 
-    public void setQueuename(String queuename) {
-        this.queuename = queuename;
+    public void setQueueName(String queueName) {
+        this.queueName = queueName;
     }
 
     public void setWorktime(int worktime) {
         this.worktime = worktime;
     }
 
-    public void setWorktime_left(int worktime_left) {
-        this.worktime_left = worktime_left;
+    public void setWorktimeLeft(int worktimeLeft) {
+        this.worktimeLeft = worktimeLeft;
     }
 }
