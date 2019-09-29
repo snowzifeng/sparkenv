@@ -1,6 +1,8 @@
 package sparkenv;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import jdk.nashorn.internal.scripts.JO;
 import job.Job;
 import jobqueue.JobsQueue;
@@ -101,7 +103,7 @@ public class SparkEnv {
     }
 
 
-    public String doAction(int interal, Map<String, TwoTuple<Integer, Integer>> queue) {
+    public JSONObject doAction(int interal, Map<String, TwoTuple<Integer, Integer>> queue) {
         Map<String, JobsQueue> map = scheduler.getQueueMap();
         List<String> queueName = new ArrayList<String>(initmap.keySet());
 
@@ -137,37 +139,55 @@ public class SparkEnv {
         List<String> source = new LinkedList<String>();
         List<String> stricts = new LinkedList<String>();
         List<String> name = new LinkedList<String>();
+        JSONObject answer = new JSONObject();
+        JSONArray array = new JSONArray();
+        JSONArray array1 = new JSONArray();
+        JSONArray array2 = new JSONArray();
 
         for (JobsQueue q : map.values()) {
             for (Job j : q.getQueueRun()) runJob.add(j);
             for (Job j : q.getQueueWait()) waitJob.add(j);
+            JSONObject temp = new JSONObject();
+            temp.put("used",q.getUsedContainer());
+            temp.put("left",q.getLeftContainer());
+            array1.add(temp);
+            JSONObject temp2 = new JSONObject();
+            temp2.put("common",q.getInitContainer());
+            temp2.put("max",q.getMaxContainer());
+            array2.add(temp2);
             source.add("used:" + q.getUsedContainer() + ",left:" + q.getLeftContainer());
             stricts.add("common:" + q.getInitContainer() + ",max:" + q.getMaxContainer());
             name.add(q.getName());
         }
-        JSONArray jsonArray = new JSONArray();
+        answer.put("source",array1);
+        answer.put("stricts",array2);
 
-        String state = "{workload:{run:[";
-        String temp = "";
+        array = new JSONArray();
         for (Job j : runJob) {
-            temp += "{queueName:" + j.getQueueName() + ",worktime:" + j.getWorktimeLeft() + ",container:" + (j.getMaxContainer() - j.getContainer()) + "},";
+            JSONObject object = new JSONObject();
+            object.put("queue", j.getQueueName());
+            object.put("worktime", j.getWorktimeLeft());
+            object.put("container", j.getMaxContainer() - j.getContainer());
+            array.add(object);
         }
-        temp = temp.substring(0, temp.length() - 1);
-        state += temp + "],wait:[";
-        temp = "";
+        answer.put("runJob", array);
+        array = new JSONArray();
         for (Job j : waitJob) {
-            temp += "{queueName:" + j.getQueueName() + ",worktime:" + j.getWorktimeLeft() + ",container:" + (j.getMaxContainer() - j.getContainer()) + "},";
+            JSONObject object = new JSONObject();
+            object.put("queue", j.getQueueName());
+            object.put("worktime", j.getWorktimeLeft());
+            object.put("container", j.getMaxContainer() - j.getContainer());
+            array.add(object);
         }
-        temp = temp.substring(0, temp.length() - 1);
-        state += temp + "],source:[";
+        answer.put("waitJob", array);
 
-        String sourceString = "";
-        for (int i = 0; i < name.size(); i++) {
-            sourceString += source.get(i);
-        }
+        answer.put("source", source);
+        answer.put("stricts", stricts);
 
 
-        return state;
+
+
+        return answer;
 
     }
 
