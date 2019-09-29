@@ -2,9 +2,13 @@ package synchronizemodel.socketmodel.reset;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import sparkenv.SparkEnv;
 import synchronizemodel.SparkStaticModelManager;
 import synchronizemodel.socketmodel.IHandler;
-import util.TupleUtil;
+import synchronizemodel.socketmodel.simulation.QueueArgument;
+import util.ArgumentParsingUtil;
+import util.JobAdaptionUtil;
+import util.QueueAdaptionUtil;
 import util.TwoTuple;
 
 import java.util.ArrayList;
@@ -13,7 +17,7 @@ import java.util.List;
 public class ResetHandler implements IHandler {
 
     private SparkStaticModelManager modelManager;
-    private SparkModelToJobConverter converter = new SparkModelToJobConverter();
+    private SparkEnv sparkEnv = new SparkEnv();
 
     public ResetHandler(final SparkStaticModelManager modelManager) {
         this.modelManager = modelManager;
@@ -21,18 +25,21 @@ public class ResetHandler implements IHandler {
 
     public TwoTuple<JSONObject, Boolean> handle(JSONObject data) {
         final ResetArgument arguments = parseArguments(data);
-        resetEnvironment(arguments);
-        return TupleUtil.emptyTwo();
+        JSONObject state = resetEnvironment(arguments);
+        return new TwoTuple<>(state, true);
     }
 
-    private void resetEnvironment(final ResetArgument resetArgument) {
-        // TODO: 此处添加reset的业务逻辑
+    private JSONObject resetEnvironment(final ResetArgument resetArgument) {
+        sparkEnv.init(0, QueueAdaptionUtil.convert(resetArgument.getQueueArguments()));
+        sparkEnv.runEnv(JobAdaptionUtil.convert(resetArgument));
+        return sparkEnv.doAction(resetArgument.getStepInterval(), QueueAdaptionUtil.convert(resetArgument.getQueueArguments()));
     }
 
     private ResetArgument parseArguments(final JSONObject data) {
         JSONArray jsonArray = data.getJSONArray("workloads");
         int stepInterval = data.getIntValue("interval");
         int numContainer = data.getIntValue("numContainer");
+        List<QueueArgument> queueArguments = ArgumentParsingUtil.parseQueueArguments(data);
 
         List<Workload> workloadList = new ArrayList<>();
         for (int i = 0; i != jsonArray.size(); ++i) {
@@ -45,7 +52,8 @@ public class ResetHandler implements IHandler {
             Workload workload = new Workload(appType, dataSize, submitInterval, queue);
             workloadList.add(workload);
         }
-        return new ResetArgument(workloadList, numContainer, stepInterval);
+
+        return new ResetArgument(queueArguments, workloadList, numContainer, stepInterval);
     }
 
 }
