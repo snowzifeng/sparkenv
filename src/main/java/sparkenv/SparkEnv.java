@@ -114,8 +114,9 @@ public class SparkEnv {
 
         int totaltime = interal;
         List<JobsQueue> queues = new ArrayList<JobsQueue>(map.values());
+
         while (true) {
-            if (0 < jobInformation.size()) {
+            if (0 < jobInformation.size() && totaltime > 0) {
                 int time = jobInformation.get(0).getFirst();
                 for (JobsQueue temp : queues) {
                     SimulateRunning.run(time, temp);
@@ -124,13 +125,8 @@ public class SparkEnv {
                 scheduler.addJob(jobInformation.get(0).getSecond().getSecond(), job);
                 jobInformation.remove(0);
                 totaltime -= time;
-            } else if (totaltime > 0) {
-                for (JobsQueue temp : queues) {
-                    SimulateRunning.run(totaltime, temp);
-                }
+            } else
                 break;
-            }
-
         }
 
         List<Job> runJob = new LinkedList<Job>();
@@ -147,19 +143,19 @@ public class SparkEnv {
             for (Job j : q.getQueueRun()) runJob.add(j);
             for (Job j : q.getQueueWait()) waitJob.add(j);
             JSONObject temp = new JSONObject();
-            temp.put("used",q.getUsedContainer());
-            temp.put("left",q.getLeftContainer());
+            temp.put("used", q.getUsedContainer());
+            temp.put("left", q.getLeftContainer());
             array1.add(temp);
             JSONObject temp2 = new JSONObject();
-            temp2.put("common",q.getInitContainer());
-            temp2.put("max",q.getMaxContainer());
+            temp2.put("common", q.getInitContainer());
+            temp2.put("max", q.getMaxContainer());
             array2.add(temp2);
             source.add("used:" + q.getUsedContainer() + ",left:" + q.getLeftContainer());
             stricts.add("common:" + q.getInitContainer() + ",max:" + q.getMaxContainer());
             name.add(q.getName());
         }
-        answer.put("source",array1);
-        answer.put("stricts",array2);
+        answer.put("source", array1);
+        answer.put("stricts", array2);
 
         array = new JSONArray();
         for (Job j : runJob) {
@@ -182,11 +178,15 @@ public class SparkEnv {
 
         answer.put("source", source);
         answer.put("stricts", stricts);
+        JSONObject f = new JSONObject();
+        if (jobInformation.size()==0){
+            f.put("done",true);
+        }else{
+            f.put("done",false);
+        }
+        f.put("state",answer);
 
-
-
-
-        return answer;
+        return f;
 
     }
 
