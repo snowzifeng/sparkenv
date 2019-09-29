@@ -1,13 +1,13 @@
 package simulateRun;
 
-import jobqueue.JobQueue;
+import jobqueue.JobsQueue;
 
 import java.util.Collections;
 import java.util.List;
 
 import job.Job;
 
-public class SimulateRun {
+public class SimulateRunning {
     static List<Job> jobList_run;
     static List<Job> jobList_wait;
     static int container;
@@ -103,14 +103,10 @@ public class SimulateRun {
 
                     job.setContainer(job.getContainer() + container);
 
-
                 } else {
                     container -= (job.getMaxContainer() - job.getContainer());
                     job.setContainer(job.getMaxContainer());
-
-//
                     wait2run();
-
 
                 }
             }
@@ -120,31 +116,31 @@ public class SimulateRun {
 
     }
 
-    public static void run(int time, JobQueue queue) {
+    public static void run(int time, JobsQueue queue) {
         jobList_run = queue.getQueueRun();
         jobList_wait = queue.getQueueWait();
         container = queue.getLeftContainer();
         Collections.sort(jobList_run);
-        for (Job job : jobList_run) {
-            System.out.print(job.getWorktimeLeft() + " ");
-        }
-        System.out.println();
-        for (Job job : jobList_wait) {
-            System.out.print(job.getWorktimeLeft() + " ");
-        }
-        System.out.println();
+//        for (Job job : jobList_run) {
+//            System.out.print(job.getWorktimeLeft() + " ");
+//        }
+//        System.out.println();
+//        for (Job job : jobList_wait) {
+//            System.out.print(job.getWorktimeLeft() + " ");
+//        }
+//        System.out.println();
         while (time > 0) {
 
             time -= dojob(time);
-            System.out.println("runlist: ");
-            for (Job job : jobList_run) {
-                System.out.print(job.getWorktimeLeft() + " container:"+job.getContainer()+" ");
-            }
-            System.out.println();
-            System.out.println("waitlist: ");
-            for (Job job : jobList_wait) {
-                System.out.print(job.getWorktimeLeft() + " ");
-            }
+//            System.out.println("runlist: ");
+//            for (Job job : jobList_run) {
+//                System.out.print(job.getWorktimeLeft() + " container:" + job.getContainer() + " ");
+//            }
+//            System.out.println();
+//            System.out.println("waitlist: ");
+//            for (Job job : jobList_wait) {
+//                System.out.print(job.getWorktimeLeft() + " ");
+//            }
 
         }
         queue.setLeftContainer(container);

@@ -5,25 +5,51 @@ import java.util.List;
 
 import job.Job;
 
-public class JobQueue {
+public class JobsQueue {
     List<Job> queueRun;
     List<Job> queueWait;
     String Name;
+    int initContainer;
     int allContainer;
     int usedContainer;
     int leftContainer;
+    int maxContainer;
 
-    public JobQueue(String name, int allContainer) {
+
+
+    public JobsQueue(String name, int initContainer) {
         this.Name = name;
-        this.allContainer = allContainer;
+        this.allContainer = initContainer;
+        this.initContainer = initContainer;
+
         this.usedContainer = 0;
-        this.leftContainer = allContainer;
+        this.leftContainer = initContainer;
         this.queueWait = new LinkedList<Job>();
         this.queueRun = new LinkedList<Job>();
     }
 
-    public JobQueue(String name) {
+    public JobsQueue(String name, int initContainer, int maxContainer){
         this.Name = name;
+        this.allContainer = initContainer;
+        this.initContainer = initContainer;
+
+        this.usedContainer = 0;
+        this.leftContainer = initContainer;
+        this.queueWait = new LinkedList<Job>();
+        this.queueRun = new LinkedList<Job>();
+        this.maxContainer = maxContainer;
+    }
+
+    public int getInitContainer() {
+        return initContainer;
+    }
+
+    public void setInitContainer(int initContainer) {
+        this.initContainer = initContainer;
+    }
+
+    public int getMaxContainer() {
+        return maxContainer;
     }
 
     public void add(Job job) {
@@ -52,6 +78,10 @@ public class JobQueue {
 
     public int getLeftContainer() {
         return leftContainer;
+    }
+
+    public String getName() {
+        return Name;
     }
 
     public List<Job> getQueueRun() {

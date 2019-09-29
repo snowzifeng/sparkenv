@@ -1,13 +1,13 @@
 package scheduler;
 
-import jobqueue.JobQueue;
+import jobqueue.JobsQueue;
 
 import java.util.List;
 
 import job.Job;
 
 public abstract class AbstractScheduler {
-    List<JobQueue> queueList;
+    List<JobsQueue> queueList;
 
     abstract String getState();
 
@@ -15,7 +15,7 @@ public abstract class AbstractScheduler {
 
     abstract void addJob(int index, Job job);
 
-    public void addQueue(JobQueue queue) {
+    public void addQueue(JobsQueue queue) {
         queueList.add(queue);
     }
 
