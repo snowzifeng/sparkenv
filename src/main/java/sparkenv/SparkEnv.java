@@ -3,7 +3,6 @@ package sparkenv;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import jdk.nashorn.internal.scripts.JO;
 import job.Job;
 import jobqueue.JobsQueue;
 import scheduler.AbstractScheduler;

@@ -23,15 +23,14 @@ public class ResetHandler implements IHandler {
         this.modelManager = modelManager;
     }
 
-    public TwoTuple<JSONObject, Boolean> handle(JSONObject data) {
+    public JSONObject handle(JSONObject data) {
         final ResetArgument arguments = parseArguments(data);
-        JSONObject state = resetEnvironment(arguments);
-        return new TwoTuple<>(state, true);
+        return resetEnvironment(arguments);
     }
 
     private JSONObject resetEnvironment(final ResetArgument resetArgument) {
         sparkEnv.init(0, QueueAdaptionUtil.convert(resetArgument.getQueueArguments()));
-        sparkEnv.runEnv(JobAdaptionUtil.convert(resetArgument));
+        sparkEnv.runEnv(JobAdaptionUtil.convert(resetArgument, modelManager));
         return sparkEnv.doAction(resetArgument.getStepInterval(), QueueAdaptionUtil.convert(resetArgument.getQueueArguments()));
     }
 

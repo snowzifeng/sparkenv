@@ -15,15 +15,13 @@ public class SimulationStepHandler implements IHandler {
 
     private SparkEnv sparkEnv = new SparkEnv();
 
-    public TwoTuple<JSONObject, Boolean> handle(JSONObject data) {
+    public JSONObject handle(JSONObject data) {
         List<QueueArgument> queueArguments = ArgumentParsingUtil.parseQueueArguments(data);
         return simulateStep(queueArguments);
     }
 
-    private TwoTuple<JSONObject, Boolean> simulateStep(List<QueueArgument> queueArguments) {
-        return new TwoTuple<JSONObject, Boolean>(
-                sparkEnv.doAction(30, QueueAdaptionUtil.convert(queueArguments)), true
-        );
+    private JSONObject simulateStep(List<QueueArgument> queueArguments) {
+        return sparkEnv.doAction(30, QueueAdaptionUtil.convert(queueArguments));
     }
 
 }

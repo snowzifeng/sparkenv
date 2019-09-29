@@ -2,7 +2,7 @@ package scheduler;
 
 import job.Job;
 
-public class FairScheduler extends AbstractScheduler {
+public abstract class FairScheduler extends AbstractScheduler {
 
 
     String getState() {

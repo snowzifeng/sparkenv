@@ -9,7 +9,6 @@ import java.net.Socket;
 
 public class SocketServer extends Thread {
 
-    private boolean shouldRun = false;
     private IHandler handler;
     private ServerSocket serverSocket;
 
@@ -20,9 +19,8 @@ public class SocketServer extends Thread {
 
     @Override
     public void run() {
-        shouldRun = true;
         try {
-            while (shouldRun) {
+            while (true) {
                 runStep();
             }
         } catch (IOException e) {
@@ -49,9 +47,8 @@ public class SocketServer extends Thread {
 
     private String handle(final String data) {
         JSONObject input = JSONObject.parseObject(data);
-        TwoTuple<JSONObject, Boolean> results = handler.handle(input);
-        shouldRun = results.getSecond();
-        return JSONObject.toJSONString(results.getFirst());
+        JSONObject results = handler.handle(input);
+        return JSONObject.toJSONString(results);
     }
 
 }
