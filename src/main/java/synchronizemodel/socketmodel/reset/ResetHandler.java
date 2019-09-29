@@ -16,10 +16,11 @@ import java.util.List;
 
 public class ResetHandler implements IHandler {
 
+    private SparkEnv sparkEnv;
     private SparkStaticModelManager modelManager;
-    private SparkEnv sparkEnv = new SparkEnv();
 
-    public ResetHandler(final SparkStaticModelManager modelManager) {
+    public ResetHandler(final SparkEnv sparkEnv, final SparkStaticModelManager modelManager) {
+        this.sparkEnv = sparkEnv;
         this.modelManager = modelManager;
     }
 
@@ -43,7 +44,7 @@ public class ResetHandler implements IHandler {
         List<Workload> workloadList = new ArrayList<>();
         for (int i = 0; i != jsonArray.size(); ++i) {
             JSONObject object = jsonArray.getJSONObject(i);
-            final String appType = object.getString("appType");
+            final String appType = object.getString("name");
             final int dataSize = object.getIntValue("dataSize");
             final int submitInterval = object.getIntValue("interval");
             final String queue = object.getString("queue");

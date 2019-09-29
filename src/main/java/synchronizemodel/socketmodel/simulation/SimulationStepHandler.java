@@ -13,7 +13,11 @@ import java.util.List;
 
 public class SimulationStepHandler implements IHandler {
 
-    private SparkEnv sparkEnv = new SparkEnv();
+    private SparkEnv sparkEnv;
+
+    public SimulationStepHandler(final SparkEnv sparkEnv) {
+        this.sparkEnv = sparkEnv;
+    }
 
     public JSONObject handle(JSONObject data) {
         List<QueueArgument> queueArguments = ArgumentParsingUtil.parseQueueArguments(data);
@@ -21,7 +25,7 @@ public class SimulationStepHandler implements IHandler {
     }
 
     private JSONObject simulateStep(List<QueueArgument> queueArguments) {
-        return sparkEnv.doAction(30, QueueAdaptionUtil.convert(queueArguments));
+        return sparkEnv.doAction(30000, QueueAdaptionUtil.convert(queueArguments));
     }
 
 }

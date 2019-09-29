@@ -1,5 +1,6 @@
 package synchronizemodel;
 
+import sparkenv.SparkEnv;
 import synchronizemodel.socketmodel.reset.ResetHandler;
 import synchronizemodel.socketmodel.simulation.SimulationStepHandler;
 import synchronizemodel.socketmodel.SocketServer;
@@ -17,9 +18,10 @@ public class Controller {
     private Controller() throws IOException {
         SparkStaticModelManager modelManager = new SparkStaticModelManager();
         modelManager.loadDataFromFile();
-        ResetHandler resetHandler = new ResetHandler(modelManager);
+        SparkEnv sparkEnv = new SparkEnv();
+        ResetHandler resetHandler = new ResetHandler(sparkEnv, modelManager);
         resetServer = new SocketServer(resetHandler, RESET_SERVER_PORT);
-        simulationStepServer = new SocketServer(new SimulationStepHandler(), SIMULATE_STEP_SERVER_PORT);
+        simulationStepServer = new SocketServer(new SimulationStepHandler(sparkEnv), SIMULATE_STEP_SERVER_PORT);
     }
 
     private void start() {

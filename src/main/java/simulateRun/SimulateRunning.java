@@ -66,7 +66,7 @@ public class SimulateRunning {
 
 
         if (jobList_run.isEmpty()) {
-            if (jobList_wait.isEmpty()) return 0;
+            if (jobList_wait.isEmpty()) return time;
             else wait2run();
 
         }
