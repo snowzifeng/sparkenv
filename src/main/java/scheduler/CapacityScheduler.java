@@ -22,6 +22,10 @@ public class CapacityScheduler extends AbstractScheduler {
         this.containerSize = containerNumber;
     }
 
+    public Map<String, JobsQueue> getQueueMap() {
+        return queueMap;
+    }
+
     public void initQueue(String[] name, int[] container) {
 
         for (int i = 0; i < name.length; i++) {

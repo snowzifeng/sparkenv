@@ -3,6 +3,7 @@ package scheduler;
 import jobqueue.JobsQueue;
 
 import java.util.List;
+import java.util.Map;
 
 import job.Job;
 
@@ -18,5 +19,7 @@ public abstract class AbstractScheduler {
     public void addQueue(JobsQueue queue) {
         queueList.add(queue);
     }
+    abstract public Map<String, JobsQueue> getQueueMap();
+    abstract public void addJob(String name, Job job);
 
 }

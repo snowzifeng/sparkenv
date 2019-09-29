@@ -64,6 +64,10 @@ public class JobsQueue {
         this.leftContainer = leftContainer;
     }
 
+    public void setMaxContainer(int maxContainer) {
+        this.maxContainer = maxContainer;
+    }
+
     public void setAllContainer(int allContainer) {
         this.allContainer = allContainer;
     }
