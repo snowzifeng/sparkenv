@@ -1,5 +1,6 @@
 package sparkenv;
 
+import com.alibaba.fastjson.JSONArray;
 import jdk.nashorn.internal.scripts.JO;
 import job.Job;
 import jobqueue.JobsQueue;
@@ -144,6 +145,8 @@ public class SparkEnv {
             stricts.add("common:" + q.getInitContainer() + ",max:" + q.getMaxContainer());
             name.add(q.getName());
         }
+        JSONArray jsonArray = new JSONArray();
+
         String state = "{workload:{run:[";
         String temp = "";
         for (Job j : runJob) {

@@ -51,7 +51,7 @@ public class CapacityScheduler extends AbstractScheduler {
 
     }
 
-    void addJob(String name, Job job) {
+    public void addJob(String name, Job job) {
         JobsQueue queue = queueMap.get(name);
         queue.add(job);
         if (queue.getLeftContainer() < job.getMaxContainer()) {
