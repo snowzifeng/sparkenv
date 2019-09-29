@@ -78,6 +78,7 @@ public class SimulateRunning {
         if (runtime >= time) {
 
             resettime(time);
+            wait2run();
             return time;
         } else {
 
