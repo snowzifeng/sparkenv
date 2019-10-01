@@ -95,4 +95,12 @@ public class JobsQueue {
     public List<Job> getQueueWait() {
         return queueWait;
     }
+
+    public void setQueueRun(List<Job> queueRun) {
+        this.queueRun = queueRun;
+    }
+
+    public void setQueueWait(List<Job> queueWait) {
+        this.queueWait = queueWait;
+    }
 }
