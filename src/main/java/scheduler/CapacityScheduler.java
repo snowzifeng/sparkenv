@@ -28,6 +28,18 @@ public class CapacityScheduler extends AbstractScheduler {
         return containerSize;
     }
 
+    public boolean isEmpty() {
+        for(JobsQueue q:queueMap.values()){
+            if (q.getQueueRun().isEmpty()&&q.getQueueWait().isEmpty()){
+                continue;
+            }else{
+                return false;
+            }
+        }
+
+        return true;
+    }
+
     public List<Job> getQueueRun() {
         return queueRun;
     }

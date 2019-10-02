@@ -128,10 +128,9 @@ public class SparkEnv {
             } else {
                 if (jobInformation.isEmpty()) {
                     scheduler = SimulateRunning.run(totaltime, (CapacityScheduler) scheduler);
-                    break;
-                }else{
-                    break;
+
                 }
+                break;
 
             }
 
@@ -187,7 +186,7 @@ public class SparkEnv {
         answer.put("source", source);
         answer.put("stricts", stricts);
         JSONObject f = new JSONObject();
-        if (jobInformation.size() == 0) {
+        if (jobInformation.size() == 0&&scheduler.isEmpty()) {
             f.put("done", true);
         } else {
             f.put("done", false);
