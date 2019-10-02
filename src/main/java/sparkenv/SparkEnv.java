@@ -118,15 +118,23 @@ public class SparkEnv {
         while (true) {
             if (0 < jobInformation.size() && totaltime > 0) {
                 int time = jobInformation.get(0).getFirst();
-                for (JobsQueue temp : queues) {
-                    SimulateRunning.run(time, temp);
-                }
+
+                scheduler = SimulateRunning.run(time, (CapacityScheduler) scheduler);
+
                 Job job = jobInformation.get(0).getSecond().getFirst();
                 scheduler.addJob(jobInformation.get(0).getSecond().getSecond(), job);
                 jobInformation.remove(0);
                 totaltime -= time;
-            } else
-                break;
+            } else {
+                if (jobInformation.isEmpty()) {
+                    scheduler = SimulateRunning.run(totaltime, (CapacityScheduler) scheduler);
+                    break;
+                }else{
+                    break;
+                }
+
+            }
+
         }
 
         List<Job> runJob = new LinkedList<Job>();
@@ -179,12 +187,12 @@ public class SparkEnv {
         answer.put("source", source);
         answer.put("stricts", stricts);
         JSONObject f = new JSONObject();
-        if (jobInformation.size()==0){
-            f.put("done",true);
-        }else{
-            f.put("done",false);
+        if (jobInformation.size() == 0) {
+            f.put("done", true);
+        } else {
+            f.put("done", false);
         }
-        f.put("state",answer);
+        f.put("state", answer);
 
         return f;
 
