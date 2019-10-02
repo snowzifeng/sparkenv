@@ -31,6 +31,8 @@ public class SimulateRunning {
     static List<Job> jobList_wait;
     static int container;
     static List<Job> finish = new LinkedList<>();
+    static CapacityScheduler scheduler;
+
     private static void resettime(int time) {
 //        System.out.println("enter the resettime");
 
@@ -212,7 +214,7 @@ public class SimulateRunning {
         return queue;
     }
 
-    static CapacityScheduler scheduler;
+
 //    static List<TwoTuple<Integer, TwoTuple<Job, String>>> jobInformation = new LinkedList<TwoTuple<Integer, TwoTuple<Job, String>>>();
 
     public static CapacityScheduler run(int time, CapacityScheduler s) {
