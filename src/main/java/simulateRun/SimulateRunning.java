@@ -88,6 +88,7 @@ public class SimulateRunning {
         }else {
             scheduler.setAvgTime(avg / finish.size());
         }
+        finish = new LinkedList<>();
         return avg;
     }
 
@@ -285,7 +286,7 @@ public class SimulateRunning {
         }else {
             scheduler.setAvgTime(avg/finish.size());
         }
-
+        finish = new LinkedList<>();
 
         scheduler.setQueueMap(queueMap);
 
