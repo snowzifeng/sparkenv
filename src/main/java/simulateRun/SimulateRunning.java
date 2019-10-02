@@ -53,9 +53,9 @@ public class SimulateRunning {
     private static void resettime(int time, int index) {
 //        System.out.println("enter the resettime");
         int flag = 0;
-        if (runTools[index].container < 0) {
-            flag = 1;
-        }
+//        if (runTools[index].container < 0) {
+//            flag = 1;
+//        }
         for (int i = 0; i < runTools[index].jobList_run.size() - flag; i++) {
 
             int temp = runTools[index].jobList_run.get(i).getWorktimeLeft() - time;
@@ -234,7 +234,7 @@ public class SimulateRunning {
             queue.get(i).setLeftContainer(runTools[i].container);
             queue.get(i).setMaxContainer(runTools[i].maxContainer);
             queue.get(i).setAllContainer(runTools[i].nowContainer);
-            queue.get(i).setUsedContainer(runTools[i].nowContainer - runTools[i].container);
+            queue.get(i).setUsedContainer(runTools[i].nowContainer);
             queue.get(i).setQueueRun(runTools[i].jobList_run);
             queue.get(i).setQueueWait(runTools[i].jobList_wait);
             queueMap.put(queue.get(i).getName(), queue.get(i));

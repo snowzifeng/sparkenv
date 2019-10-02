@@ -149,7 +149,7 @@ public class SparkEnv {
             for (Job j : q.getQueueRun()) runJob.add(j);
             for (Job j : q.getQueueWait()) waitJob.add(j);
             JSONObject temp = new JSONObject();
-            temp.put("used", q.getAllContainer()-q.getLeftContainer());
+            temp.put("used", q.getAllContainer());
             temp.put("left", q.getLeftContainer());
             array1.add(temp);
             JSONObject temp2 = new JSONObject();
