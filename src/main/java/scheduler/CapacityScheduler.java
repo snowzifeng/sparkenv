@@ -15,6 +15,7 @@ public class CapacityScheduler extends AbstractScheduler {
     Set<String> minQueue = new HashSet<String>();
     List<Job> queueRun = new LinkedList<>();
     List<Job> queueWait = new LinkedList<>();
+    int avgTime = 0;
 
     public CapacityScheduler(int containerNumber, JobsQueue[] queues) {
         this.containerSize = containerNumber;
@@ -22,6 +23,14 @@ public class CapacityScheduler extends AbstractScheduler {
             this.queueMap.put(temp.getName(), temp);
         }
         this.containerSize = containerNumber;
+    }
+
+    public int getAvgTime() {
+        return avgTime;
+    }
+
+    public void setAvgTime(int avgTime) {
+        this.avgTime = avgTime;
     }
 
     public int getContainerSize() {

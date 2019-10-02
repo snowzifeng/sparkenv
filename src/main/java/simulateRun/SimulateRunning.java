@@ -30,7 +30,7 @@ public class SimulateRunning {
     static List<Job> jobList_run;
     static List<Job> jobList_wait;
     static int container;
-
+    static List<Job> finish = new LinkedList<>();
     private static void resettime(int time) {
 //        System.out.println("enter the resettime");
 
@@ -61,8 +61,11 @@ public class SimulateRunning {
             int temp = runTools[index].jobList_run.get(i).getWorktimeLeft() - time;
             if (temp == 0) {
                 runTools[index].container += runTools[index].jobList_run.get(i).getContainer();
+                runTools[index].jobList_run.get(i).setWorktimeLeft(0);
+                finish.add(runTools[index].jobList_run.get(i));
 
                 runTools[index].jobList_run.remove(i);
+
 
                 i--;
             } else {
@@ -257,6 +260,17 @@ public class SimulateRunning {
             queue.get(i).setUsedContainer(sum);
             queueMap.put(queue.get(i).getName(), queue.get(i));
         }
+
+        int avg = 0;
+        for(Job job:finish){
+            avg += job.getTotaltime();
+        }
+        if (finish.isEmpty()){
+            scheduler.setAvgTime(0);
+        }else {
+            scheduler.setAvgTime(avg/finish.size());
+        }
+
 
         scheduler.setQueueMap(queueMap);
 

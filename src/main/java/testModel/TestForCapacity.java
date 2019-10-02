@@ -25,6 +25,7 @@ public class TestForCapacity {
 //                System.out.println(queues[j].getQueueRun().size()+" : "+queues[j].getLeftContainer());
             }
             System.out.println("\nstate---------");
+            System.out.println(scheduler.getAvgTime());
             for(JobsQueue job: scheduler.getQueueMap().values()){
 
                 System.out.print(job.getName()+" \n" +job.getQueueRun().size()+" :"+job.getAllContainer()+" "+job.getLeftContainer());

@@ -161,6 +161,7 @@ public class SparkEnv {
         }
         answer.put("source", array1);
         answer.put("stricts", array2);
+        answer.put("avg",scheduler.getAvgTime());
 
         array = new JSONArray();
         for (Job j : runJob) {

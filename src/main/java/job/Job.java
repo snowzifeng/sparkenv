@@ -10,6 +10,7 @@ public class Job implements Comparable<Job> {
     int fullWorkload;
     int basetime;
     boolean finishStartPart;
+    int totaltime = 0;
 
     public Job(int maxContainer, int basetime, int worktime) {
         this.basetime = basetime;
@@ -19,7 +20,6 @@ public class Job implements Comparable<Job> {
         this.worktime = worktime + basetime;
         this.worktimeLeft = worktime + basetime;
         this.finishStartPart = false;
-
         this.container = 0;
 
 
@@ -116,6 +116,11 @@ public class Job implements Comparable<Job> {
     }
 
     public void setWorktimeLeft(int worktimeLeft) {
+        this.totaltime += this.worktimeLeft - worktimeLeft;
         this.worktimeLeft = worktimeLeft;
+    }
+
+    public int getTotaltime() {
+        return totaltime;
     }
 }
