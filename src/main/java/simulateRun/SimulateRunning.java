@@ -231,10 +231,9 @@ public class SimulateRunning {
 
             if (runTools[0].jobList_run.isEmpty() && runTools[1].jobList_run.isEmpty()) {
                 for (int i = 0; i < queue.size(); i++) {
-                    runTools[i].nowContainer = queue.get(i).getAllContainer();
+                    runTools[i].nowContainer = queue.get(i).getInitContainer();
                     runTools[i].container = runTools[i].nowContainer;
                     Collections.sort(runTools[i].jobList_run);
-
                 }
 
             }
