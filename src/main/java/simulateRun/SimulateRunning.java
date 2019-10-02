@@ -76,6 +76,19 @@ public class SimulateRunning {
 
     }
 
+    public static int avgFinishTime(){
+        int avg = 0;
+        for(Job job:finish){
+            avg += job.getTotaltime();
+        }
+        if (finish.isEmpty()){
+            scheduler.setAvgTime(0);
+        }else {
+            scheduler.setAvgTime(avg / finish.size());
+        }
+        return avg;
+    }
+
     private static void wait2run() {
         if (jobList_wait.isEmpty()) {
             return;
