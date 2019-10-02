@@ -243,12 +243,21 @@ public class SimulateRunning {
             queue.get(i).setLeftContainer(runTools[i].container);
             queue.get(i).setMaxContainer(runTools[i].maxContainer);
             queue.get(i).setAllContainer(runTools[i].nowContainer);
-            queue.get(i).setUsedContainer(runTools[i].nowContainer);
+//            queue.get(i).setUsedContainer(runTools[i].nowContainer);
             queue.get(i).setQueueRun(runTools[i].jobList_run);
             queue.get(i).setQueueWait(runTools[i].jobList_wait);
-            queueMap.put(queue.get(i).getName(), queue.get(i));
 
         }
+
+        for (int i = 0; i < 2; i++) {
+            int sum = 0;
+            for(Job job:runTools[i].jobList_run){
+                sum+=job.getContainer();
+            }
+            queue.get(i).setUsedContainer(sum);
+            queueMap.put(queue.get(i).getName(), queue.get(i));
+        }
+
         scheduler.setQueueMap(queueMap);
 
 
