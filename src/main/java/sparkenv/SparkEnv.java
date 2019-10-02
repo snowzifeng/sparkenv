@@ -135,11 +135,10 @@ public class SparkEnv {
             }
 
         }
-
+        map = scheduler.getQueueMap();
         List<Job> runJob = new LinkedList<Job>();
         List<Job> waitJob = new LinkedList<Job>();
-        List<String> source = new LinkedList<String>();
-        List<String> stricts = new LinkedList<String>();
+
         List<String> name = new LinkedList<String>();
         JSONObject answer = new JSONObject();
         JSONArray array = new JSONArray();
@@ -150,15 +149,14 @@ public class SparkEnv {
             for (Job j : q.getQueueRun()) runJob.add(j);
             for (Job j : q.getQueueWait()) waitJob.add(j);
             JSONObject temp = new JSONObject();
-            temp.put("used", q.getUsedContainer());
+            temp.put("used", q.getAllContainer()-q.getLeftContainer());
             temp.put("left", q.getLeftContainer());
             array1.add(temp);
             JSONObject temp2 = new JSONObject();
             temp2.put("common", q.getInitContainer());
             temp2.put("max", q.getMaxContainer());
             array2.add(temp2);
-            source.add("used:" + q.getUsedContainer() + ",left:" + q.getLeftContainer());
-            stricts.add("common:" + q.getInitContainer() + ",max:" + q.getMaxContainer());
+
             name.add(q.getName());
         }
         answer.put("source", array1);
@@ -183,8 +181,6 @@ public class SparkEnv {
         }
         answer.put("waitJob", array);
 
-        answer.put("source", source);
-        answer.put("stricts", stricts);
         JSONObject f = new JSONObject();
         if (jobInformation.size() == 0&&scheduler.isEmpty()) {
             f.put("done", true);
