@@ -228,6 +228,16 @@ public class SimulateRunning {
 
 //            System.out.println("pass time:-----"+time);
             time -= dojob(time, 1);
+            if (runTools[0].jobList_run.isEmpty()&&runTools[1].jobList_run.isEmpty()){
+                for (int i = 0; i < queue.size(); i++) {
+                    runTools[i].maxContainer = queue.get(i).getMaxContainer();
+                    runTools[i].nowContainer = queue.get(i).getAllContainer();
+                    runTools[i].initContainer = queue.get(i).getInitContainer();
+                    Collections.sort(runTools[i].jobList_run);
+
+                }
+
+            }
         }
         Map<String, JobsQueue> queueMap = new HashMap<>();
         for (int i = 0; i < queue.size(); i++) {
