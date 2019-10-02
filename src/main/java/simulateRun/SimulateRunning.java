@@ -52,8 +52,12 @@ public class SimulateRunning {
 
     private static void resettime(int time, int index) {
 //        System.out.println("enter the resettime");
+        int flag = 0;
+        if (runTools[index].container < 0) {
+            flag = 1;
+        }
+        for (int i = 0; i < runTools[index].jobList_run.size() - flag; i++) {
 
-        for (int i = 0; i < runTools[index].jobList_run.size(); i++) {
             int temp = runTools[index].jobList_run.get(i).getWorktimeLeft() - time;
             if (temp == 0) {
                 runTools[index].container += runTools[index].jobList_run.get(i).getContainer();
@@ -536,11 +540,12 @@ public class SimulateRunning {
                             temp = runTools[min].jobList_wait.get(0);
                             temp.setContainer(maxContainer);
                             runTools[min].jobList_run.add(temp);
-                            base += temp.getMaxContainer();
+                            base += maxContainer;
                             runTools[min].jobList_wait.remove(0);
 
                         }
                     }
+                    System.out.print("");
 
 //
 //                    runTools[min].container = maxContainer;
@@ -559,11 +564,20 @@ public class SimulateRunning {
 ////                    runTools[min].nowContainer = runTools[min].initContainer;
 //                }
 
-                runTools[min].nowContainer += base;
-                runTools[min].container = base>runTools[min].container?0:runTools[min].container-base;
-                runTools[max].nowContainer -= base;
-                runTools[max].container -= base;
+                if (base > runTools[min].container) {
+                    runTools[min].nowContainer += (base - runTools[min].container);
+                    runTools[max].nowContainer -= (base - runTools[min].container);
+                    runTools[max].container -= (base - runTools[min].container);
+                    runTools[min].container = 0;
+                } else {
 
+                    runTools[min].container = runTools[min].container - base;
+                }
+//                runTools[min].nowContainer += base;
+//                runTools[min].container = base > runTools[min].container ? 0 : runTools[min].container - base;
+//                runTools[max].nowContainer -= base;
+//                runTools[max].container -= base;
+                System.out.print("");
             }
             if (runTools[max].jobList_wait.isEmpty()) return;
 

@@ -24,15 +24,15 @@ public class TestForCapacity {
 
 //                System.out.println(queues[j].getQueueRun().size()+" : "+queues[j].getLeftContainer());
             }
-
+            System.out.println("\nstate---------");
             for(JobsQueue job: scheduler.getQueueMap().values()){
-                System.out.println("state---------");
-                System.out.print(job.getName()+" " +job.getQueueRun().size()+" :"+job.getAllContainer()+" "+" -left: "+job.getLeftContainer()+" ===");
-                System.out.println();
+
+                System.out.print(job.getName()+" \n" +job.getQueueRun().size()+" :"+job.getAllContainer()+" "+job.getLeftContainer());
+                System.out.print("\n");
                 for(Job k: job.getQueueRun()){
                     System.out.print(k.getContainer()+" ");
                 }
-                System.out.println();
+                System.out.println("\n");
 
             }
         }
