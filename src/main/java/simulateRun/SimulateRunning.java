@@ -89,7 +89,7 @@ public class SimulateRunning {
             scheduler.setAvgTime(avg / finish.size());
         }
         finish.clear();
-        return avg;
+        return scheduler.getAvgTime();
     }
 
     private static void wait2run() {
@@ -286,7 +286,6 @@ public class SimulateRunning {
         }else {
             scheduler.setAvgTime(avg/finish.size());
         }
-
 
         scheduler.setQueueMap(queueMap);
 
