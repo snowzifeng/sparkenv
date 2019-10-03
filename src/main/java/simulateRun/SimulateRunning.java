@@ -286,7 +286,7 @@ public class SimulateRunning {
         }else {
             scheduler.setAvgTime(avg/finish.size());
         }
-        finish.clear();
+
 
         scheduler.setQueueMap(queueMap);
 
