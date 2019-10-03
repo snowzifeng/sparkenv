@@ -78,14 +78,14 @@ public class SimulateRunning {
 
     }
 
-    public static int avgFinishTime(){
+    public static int avgFinishTime() {
         int avg = 0;
-        for(Job job:finish){
+        for (Job job : finish) {
             avg += job.getTotaltime();
         }
-        if (finish.isEmpty()){
+        if (finish.isEmpty()) {
             scheduler.setAvgTime(0);
-        }else {
+        } else {
             scheduler.setAvgTime(avg / finish.size());
         }
         finish.clear();
@@ -254,6 +254,27 @@ public class SimulateRunning {
                     runTools[i].container = runTools[i].nowContainer;
                     Collections.sort(runTools[i].jobList_run);
                 }
+            } else if (runTools[0].jobList_run.isEmpty()||runTools[0].jobList_run.isEmpty()) {
+                int a = 0;
+                int b = 1;
+                if (runTools[1].jobList_run.isEmpty()){
+                    a = 1;
+                    b = 0;
+                }
+                if (runTools[b].container<0){
+//                    runTools[b].container = runTools[0].container;
+//                    if (runTools[b].container+runTools[a].nowContainer<0){
+//
+//                    }else{
+//                        runTools[a].nowContainer+= runTools[b].container;
+//                        runTools[a].container = runTools[a].nowContainer;
+//                        runTools[b].container = 0;
+//
+//                    }
+
+                }else{
+                    runTools[a].container = runTools[0].nowContainer;
+                }
 
             }
         }
@@ -270,21 +291,21 @@ public class SimulateRunning {
 
         for (int i = 0; i < 2; i++) {
             int sum = 0;
-            for(Job job:runTools[i].jobList_run){
-                sum+=job.getContainer();
+            for (Job job : runTools[i].jobList_run) {
+                sum += job.getContainer();
             }
             queue.get(i).setUsedContainer(sum);
             queueMap.put(queue.get(i).getName(), queue.get(i));
         }
 
         int avg = 0;
-        for(Job job:finish){
+        for (Job job : finish) {
             avg += job.getTotaltime();
         }
-        if (finish.isEmpty()){
+        if (finish.isEmpty()) {
             scheduler.setAvgTime(0);
-        }else {
-            scheduler.setAvgTime(avg/finish.size());
+        } else {
+            scheduler.setAvgTime(avg / finish.size());
         }
 
         scheduler.setQueueMap(queueMap);
