@@ -17,8 +17,10 @@ public class TestForCapacity {
         for (int j = 0; j < 30; j++) {
             for (int i = 0; i < 18; i++) {
                 Random random = new Random();
-                Job job1 = new Job(8+random.nextInt(3), 10, 20 + random.nextInt(10));
-                scheduler.addJob(queues[random.nextInt(2)].getName(),job1);
+                Job job1 = new Job(8+random.nextInt(5), 10, 20 + random.nextInt(10));
+                scheduler.addJob(queues[0].getName(),job1);
+                Job job2 = new Job(8+random.nextInt(3), 10, 20 + random.nextInt(10));
+                scheduler.addJob(queues[random.nextInt(2)].getName(),job2);
                 scheduler = SimulateRunning.run(8,scheduler);
 //                System.out.println("test  i-----:"+ i);
 
@@ -40,8 +42,6 @@ public class TestForCapacity {
 
             }
         }
-
-
 
     }
 }
