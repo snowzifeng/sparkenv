@@ -116,8 +116,13 @@ public class Job implements Comparable<Job> {
     }
 
     public void setWorktimeLeft(int worktimeLeft) {
-        this.totaltime += this.worktimeLeft - worktimeLeft;
+        if (this.worktimeLeft < worktimeLeft) {
+            System.err.println("small----------");
+            System.exit(0);
+        }
+        this.totaltime += (this.worktimeLeft - worktimeLeft);
         this.worktimeLeft = worktimeLeft;
+//        System.out.println("totaltime: " + this.totaltime);
     }
 
     public int getTotaltime() {

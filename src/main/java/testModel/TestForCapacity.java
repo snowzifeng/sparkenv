@@ -15,19 +15,27 @@ public class TestForCapacity {
 
         CapacityScheduler scheduler = new CapacityScheduler(20, queues);
         for (int j = 0; j < 30; j++) {
-            for (int i = 0; i < 18; i++) {
+            for (int i = 0; i < 30; i++) {
                 Random random = new Random();
-                Job job1 = new Job(8+random.nextInt(5), 10, 20 + random.nextInt(10));
+                Job job1 = new Job(8+random.nextInt(5), 10, 10 + random.nextInt(10));
                 scheduler.addJob(queues[0].getName(),job1);
                 Job job2 = new Job(8+random.nextInt(3), 10, 20 + random.nextInt(10));
                 scheduler.addJob(queues[random.nextInt(2)].getName(),job2);
-                scheduler = SimulateRunning.run(8,scheduler);
+
 //                System.out.println("test  i-----:"+ i);
+//                System.out.println(SimulateRunning.avgFinishTime());
 
 //                System.out.println(queues[j].getQueueRun().size()+" : "+queues[j].getLeftContainer());
             }
+            for(int i  = 0;i<4;i++){
+                scheduler = SimulateRunning.run(18,scheduler);
+                System.out.println(SimulateRunning.avgFinishTime());
+            }
+
             System.out.println("\nstate---------");
             System.out.println(scheduler.getAvgTime());
+
+
             for(JobsQueue job: scheduler.getQueueMap().values()){
 
                 System.out.print(job.getName()+" \n" +job.getQueueRun().size()+" :"+job.getAllContainer()+" "+job.getLeftContainer());
@@ -39,6 +47,7 @@ public class TestForCapacity {
                 System.out.println("get used container"+job.getUsedContainer());
                 System.out.println("get left container"+job.getLeftContainer());
                 System.out.println("get all container"+job.getAllContainer());
+
 
             }
         }
