@@ -1,7 +1,5 @@
 package job;
 
-import com.sun.xml.internal.ws.api.message.ExceptionHasMessage;
-
 public class Job implements Comparable<Job> {
     int container = 0;
     int maxContainer = 0;
