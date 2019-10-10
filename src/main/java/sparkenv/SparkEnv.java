@@ -101,6 +101,9 @@ public class SparkEnv {
 
     }
 
+    public void predictTime(){
+
+    }
 
     public JSONObject doAction(int interal, Map<String, TwoTuple<Integer, Integer>> queue) {
         Map<String, JobsQueue> map = scheduler.getQueueMap();

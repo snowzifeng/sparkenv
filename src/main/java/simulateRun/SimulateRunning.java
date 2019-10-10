@@ -59,12 +59,12 @@ public class SimulateRunning {
 //            flag = 1;
 //        }
 
-        if (runTools[1].nowContainer < runTools[1].container) {
-            System.out.print("");
-        }
-        if (runTools[0].nowContainer < 0 || runTools[1].nowContainer < 0) {
-            System.out.print("");
-        }
+//        if (runTools[1].nowContainer < runTools[1].container) {
+//            System.out.print("");
+//        }
+//        if (runTools[0].nowContainer < 0 || runTools[1].nowContainer < 0) {
+//            System.out.print("");
+//        }
         Collections.sort(runTools[index].jobList_run);
         for (int i = 0; i < runTools[index].jobList_run.size() - flag; i++) {
 
