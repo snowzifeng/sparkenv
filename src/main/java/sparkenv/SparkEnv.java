@@ -28,6 +28,7 @@ public class SparkEnv {
         JobsQueue[] jobsQueues = new JobsQueue[queueName.size()];
         this.fullContainer = fullContainer;
         this.initmap = queue;
+        SimulateRunning.resetFinish();
         this.chooseScheduler = chooseScheduler;
 
         for (int i = 0; i < queueName.size(); i++) {
@@ -101,7 +102,7 @@ public class SparkEnv {
 
     }
 
-    public void predictTime(){
+    public void predictTime() {
 
     }
 
@@ -109,10 +110,11 @@ public class SparkEnv {
         Map<String, JobsQueue> map = scheduler.getQueueMap();
         List<String> queueName = new ArrayList<String>(initmap.keySet());
 
-        for (int i = 0; i < queueName.size(); i++) {
-            map.get(queueName.get(i)).setAllContainer(queue.get(queueName.get(i)).getFirst());
-            map.get(queueName.get(i)).setMaxContainer(queue.get(queueName.get(i)).getSecond());
-        }
+        if (!queue.isEmpty())
+            for (int i = 0; i < queueName.size(); i++) {
+                map.get(queueName.get(i)).setAllContainer(queue.get(queueName.get(i)).getFirst());
+                map.get(queueName.get(i)).setMaxContainer(queue.get(queueName.get(i)).getSecond());
+            }
 
 
         int totaltime = interal;
@@ -164,7 +166,7 @@ public class SparkEnv {
         }
         answer.put("source", array1);
         answer.put("stricts", array2);
-        answer.put("avg",scheduler.getAvgTime());
+        answer.put("avg", scheduler.getAvgTime());
 
         array = new JSONArray();
         for (Job j : runJob) {
@@ -186,7 +188,7 @@ public class SparkEnv {
         answer.put("waitJob", array);
 
         JSONObject f = new JSONObject();
-        if (jobInformation.size() == 0&&scheduler.isEmpty()) {
+        if (jobInformation.size() == 0 && scheduler.isEmpty()) {
             f.put("done", true);
         } else {
             f.put("done", false);
