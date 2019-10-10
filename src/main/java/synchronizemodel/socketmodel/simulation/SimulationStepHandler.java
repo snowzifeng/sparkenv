@@ -25,7 +25,7 @@ public class SimulationStepHandler implements IHandler {
     }
 
     private JSONObject simulateStep(List<QueueArgument> queueArguments) {
-        return sparkEnv.doAction(1000, QueueAdaptionUtil.convert(queueArguments));
+        return sparkEnv.doAction(sparkEnv.getStepInterval(), QueueAdaptionUtil.convert(queueArguments));
     }
 
 }

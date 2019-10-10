@@ -22,6 +22,7 @@ public class SparkEnv {
     Map<String, TwoTuple<Integer, Integer>> initmap;
     int chooseScheduler;
     List<TwoTuple<Integer, TwoTuple<Job, String>>> jobInformation = new LinkedList<TwoTuple<Integer, TwoTuple<Job, String>>>();
+    int stepInterval;
 
     public void init(int chooseScheduler, Map<String, TwoTuple<Integer, Integer>> queue) {
         List<String> queueName = new ArrayList<String>(queue.keySet());
@@ -46,6 +47,14 @@ public class SparkEnv {
             default:
                 break;
         }
+    }
+
+    public void setStepInterval(int stepInterval) {
+        this.stepInterval = stepInterval;
+    }
+
+    public int getStepInterval() {
+        return stepInterval;
     }
 
     public void runEnv(List<TwoTuple<Integer, TwoTuple<Job, String>>> jobInformation) {

@@ -10,7 +10,7 @@ import java.util.Optional;
 
 public class SparkStaticModelManager {
 
-    private static final String MODEL_CSV_FILENAME = "test.csv";
+    private static final String MODEL_CSV_FILENAME = "model-time-costs.csv";
 
     private List<SparkModel> sparkModels = new ArrayList<>();
 
