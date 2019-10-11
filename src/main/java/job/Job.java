@@ -11,8 +11,10 @@ public class Job implements Comparable<Job> {
     int basetime;
     boolean finishStartPart;
     int totaltime = 0;
+    int delay = 0;
+    String id;
 
-    public Job(int maxContainer, int basetime, int worktime) {
+    public Job(int maxContainer, int basetime, int worktime,String id) {
         this.basetime = basetime;
         this.maxContainer = maxContainer;
         this.basetime = basetime;
@@ -21,6 +23,8 @@ public class Job implements Comparable<Job> {
         this.worktimeLeft = worktime + basetime;
         this.finishStartPart = false;
         this.container = 0;
+        this.delay = basetime;
+        this.id = id;
 
 
     }

@@ -11,7 +11,7 @@ public class TestForSimulateRun {
         JobsQueue queueA = new JobsQueue("queueA",10);
         for(int i = 0;i<6;i++){
             Random random = new Random();
-            Job job1 = new Job(4,10,20+random.nextInt(10));
+            Job job1 = new Job(4,10,20+random.nextInt(10),"1");
             queueA.add(job1);
         }
         System.out.println(queueA.getQueueWait().size());

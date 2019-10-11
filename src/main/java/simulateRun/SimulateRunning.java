@@ -52,6 +52,10 @@ public class SimulateRunning {
 
     }
 
+    public static void resetFinish() {
+        SimulateRunning.finish = new LinkedList<>();
+    }
+
     private static void resettime(int time, int index) {
 //        System.out.println("enter the resettime");
         int flag = 0;
@@ -59,12 +63,12 @@ public class SimulateRunning {
 //            flag = 1;
 //        }
 
-        if (runTools[1].nowContainer < runTools[1].container) {
-            System.out.print("");
-        }
-        if (runTools[0].nowContainer < 0 || runTools[1].nowContainer < 0) {
-            System.out.print("");
-        }
+//        if (runTools[1].nowContainer < runTools[1].container) {
+//            System.out.print("");
+//        }
+//        if (runTools[0].nowContainer < 0 || runTools[1].nowContainer < 0) {
+//            System.out.print("");
+//        }
         Collections.sort(runTools[index].jobList_run);
         for (int i = 0; i < runTools[index].jobList_run.size() - flag; i++) {
 
@@ -345,6 +349,7 @@ public class SimulateRunning {
             scheduler.setAvgTime(avg / finish.size());
         }
 
+
         scheduler.setQueueMap(queueMap);
 
 
@@ -418,12 +423,11 @@ public class SimulateRunning {
 
                 if (job.getMaxContainer() == job.getContainer()) {
 
-                    if (runTools[i].container > 0){
+                    if (runTools[i].container > 0) {
                         if (runTools[0].jobList_run.size() == 1 && runTools[0].container >= 15)
                             System.out.print("");
                         wait2runMin();
                     }
-
 
 
                 } else {
@@ -546,7 +550,7 @@ public class SimulateRunning {
                 for (Job job : runTools[i].jobList_run) {
                     sum -= job.getContainer();
                 }
-                if (sum != runTools[i].container){
+                if (sum != runTools[i].container) {
                     runTools[i].container = sum;
                 }
             }
