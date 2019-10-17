@@ -21,7 +21,28 @@ class RunTool {
         initContainer = 0;
         maxContainer = 0;
         nowContainer = 0;
+    }
 
+    @Override
+    protected RunTool clone() {
+        RunTool runTool = new RunTool();
+        if (this.jobList_run != null) {
+            for (Job job : this.jobList_run) {
+                Job temp = job.clone();
+                runTool.jobList_run.add(temp);
+            }
+        } else runTool.jobList_run = new LinkedList<>();
+        if (this.jobList_wait != null) {
+            for (Job job : this.jobList_wait) {
+                Job temp = job.clone();
+                runTool.jobList_wait.add(temp);
+            }
+        } else runTool.jobList_wait = new LinkedList<>();
+        runTool.container = this.container;
+        runTool.initContainer = this.initContainer;
+        runTool.maxContainer = this.maxContainer;
+        runTool.nowContainer = this.nowContainer;
+        return runTool;
     }
 }
 
@@ -32,6 +53,8 @@ public class SimulateRunning {
     static int container;
     static List<Job> finish = new LinkedList<>();
     static CapacityScheduler scheduler;
+    static int minTime = 0;
+    static int predictTime = 0;
 
     private static void resettime(int time) {
 //        System.out.println("enter the resettime");
@@ -78,7 +101,11 @@ public class SimulateRunning {
 //                int tb = runTools[index].nowContainer;
                 runTools[index].container += runTools[index].jobList_run.get(i).getContainer();
                 runTools[index].jobList_run.get(i).setWorktimeLeft(0);
-                finish.add(runTools[index].jobList_run.get(i));
+                Job job = runTools[index].jobList_run.get(i);
+                if (predictTime != -1) {
+                    job.setDelay(predictTime);
+                }
+                finish.add(job);
                 runTools[index].jobList_run.remove(i);
                 i--;
             } else {
@@ -249,15 +276,122 @@ public class SimulateRunning {
 
 //    static List<TwoTuple<Integer, TwoTuple<Job, String>>> jobInformation = new LinkedList<TwoTuple<Integer, TwoTuple<Job, String>>>();
 
+    public static void predict() {
+
+        runTools[2] = runTools[0].clone();
+        runTools[3] = runTools[1].clone();
+//        System.out.println("before clone");
+//        for(Job job:runTools[0].jobList_wait){
+//            System.out.println(job.getMaxContainer());
+//        }
+
+        List<Job> finishTemp = new LinkedList<>();
+        for (Job job : finish) {
+            finishTemp.add(job);
+        }
+        finish.clear();
+        int i1 = 0;
+        while (true) {
+            int minJob = minJob();
+            if (minJob == -1) {
+                break;
+            } else
+                wait2runMin();
+            predictTime += minTime;
+            System.out.print("");
+            dojob(minTime, 1);
+
+
+            if (runTools[0].jobList_run.isEmpty() && runTools[0].jobList_wait.isEmpty() && runTools[1].jobList_run.isEmpty() && runTools[1].jobList_wait.isEmpty()) {
+                break;
+            }
+            if (runTools[0].jobList_run.isEmpty() && runTools[1].jobList_run.isEmpty()) {
+                for (int i = 0; i < 2; i++) {
+                    runTools[i].nowContainer = runTools[i].initContainer;
+                    runTools[i].container = runTools[i].nowContainer;
+                    Collections.sort(runTools[i].jobList_run);
+                }
+            } else if (runTools[0].jobList_run.isEmpty() || runTools[0].jobList_run.isEmpty()) {
+                int a = 0;
+                int b = 1;
+                if (runTools[1].jobList_run.isEmpty()) {
+                    a = 1;
+                    b = 0;
+                }
+                if (runTools[b].container < 0) {
+//                    runTools[b].container = runTools[0].container;
+//                    if (runTools[b].container+runTools[a].nowContainer<0){
+//
+//                    }else{
+//                        runTools[a].nowContainer+= runTools[b].container;
+//                        runTools[a].container = runTools[a].nowContainer;
+//                        runTools[b].container = 0;
+//
+//                    }
+
+                } else {
+                    runTools[a].container = runTools[0].nowContainer;
+                }
+
+            }
+        }
+
+        Map<String, Job> map = new HashMap<String, Job>();
+        for (Job job : finish) {
+            map.put(job.getId(), job);
+        }
+        runTools[0] = runTools[2].clone();
+        runTools[1] = runTools[3].clone();
+        runTools[0].jobList_wait.clear();
+        runTools[1].jobList_wait.clear();
+        runTools[0].jobList_run.clear();
+        runTools[1].jobList_run.clear();
+        for (int i = 0; i < runTools[2].jobList_wait.size(); i++) {
+            Job job = runTools[2].jobList_wait.get(i);
+            if (map.containsKey(job.getId())) {
+                job.setDelay(map.get(job.getId()).getTotaltime());
+
+            } else {
+                System.out.println("error: " + job.getId());
+            }
+            runTools[0].jobList_wait.add(job);
+        }
+        for (int i = 0; i < runTools[3].jobList_wait.size(); i++) {
+            Job job = runTools[3].jobList_wait.get(i);
+            job.setDelay(map.get(job.getId()).getTotaltime());
+            runTools[1].jobList_wait.add(job);
+        }
+        for (int i = 0; i < runTools[2].jobList_run.size(); i++) {
+            Job job = runTools[2].jobList_run.get(i);
+            job.setDelay(map.get(job.getId()).getTotaltime());
+            runTools[0].jobList_run.add(job);
+        }
+        for (int i = 0; i < runTools[3].jobList_run.size(); i++) {
+            Job job = runTools[3].jobList_run.get(i);
+            job.setDelay(map.get(job.getId()).getTotaltime());
+            runTools[1].jobList_run.add(job);
+        }
+
+        finish.clear();
+
+        for (Job job : finishTemp) {
+            finish.add(job);
+        }
+        predictTime = -1;
+
+    }
+
     public static CapacityScheduler run(int time, CapacityScheduler s) {
+        predictTime = 0;
         scheduler = s;
         container = s.getContainerSize();
 //        jobInformation = jobs;
         List<JobsQueue> queue = new ArrayList<>(scheduler.getQueueMap().values());
-        runTools = new RunTool[queue.size()];
-
+        runTools = new RunTool[queue.size() * 2];
+        int plus = queue.size();
         for (int i = 0; i < queue.size(); i++) {
             runTools[i] = new RunTool();
+//            runTools[i+plus] = new RunTool();
             runTools[i].container = queue.get(i).getLeftContainer();
             runTools[i].maxContainer = queue.get(i).getMaxContainer();
             runTools[i].nowContainer = queue.get(i).getAllContainer();
@@ -267,6 +401,10 @@ public class SimulateRunning {
             Collections.sort(runTools[i].jobList_run);
 
         }
+
+        predict();
+        System.out.print("");
+
 
 //        System.out.println("time is :"+time);
         while (time > 0) {
@@ -998,12 +1136,15 @@ public class SimulateRunning {
 
         if (min == Integer.MAX_VALUE) {
             int flag = 0;
+            minTime = 0;
             for (int i = 0; i < 2; i++) {
                 if (!runTools[i].jobList_wait.isEmpty()) flag++;
             }
             if (flag == 0) {
                 return -1;
             }
+        } else {
+            minTime = min;
         }
 
         return min;

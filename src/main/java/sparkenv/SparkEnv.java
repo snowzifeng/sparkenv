@@ -53,7 +53,6 @@ public class SparkEnv {
         for (TwoTuple<Integer, TwoTuple<Job, String>> temp : jobInformation) {
             this.jobInformation.add(temp);
         }
-
 //        Map<String, JobsQueue> map = scheduler.getQueueMap();
 //        List<JobsQueue> queues = new ArrayList<JobsQueue>(map.values());
 //        while (true) {
@@ -75,7 +74,6 @@ public class SparkEnv {
 //
 //
 //        }
-
     }
 
 
@@ -172,7 +170,7 @@ public class SparkEnv {
         for (Job j : runJob) {
             JSONObject object = new JSONObject();
             object.put("queue", j.getQueueName());
-            object.put("worktime", j.getWorktimeLeft());
+            object.put("worktime", j.getDelay());
             object.put("container", j.getMaxContainer() - j.getContainer());
             array.add(object);
         }
@@ -181,7 +179,7 @@ public class SparkEnv {
         for (Job j : waitJob) {
             JSONObject object = new JSONObject();
             object.put("queue", j.getQueueName());
-            object.put("worktime", j.getWorktimeLeft());
+            object.put("worktime", j.getDelay());
             object.put("container", j.getMaxContainer() - j.getContainer());
             array.add(object);
         }

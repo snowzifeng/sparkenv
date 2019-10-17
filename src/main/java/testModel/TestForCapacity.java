@@ -6,6 +6,8 @@ import scheduler.CapacityScheduler;
 import simulateRun.SimulateRunning;
 import sparkenv.SparkEnv;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
 
 public class TestForCapacity {
@@ -16,19 +18,16 @@ public class TestForCapacity {
         SparkEnv env = new SparkEnv();
 
         CapacityScheduler scheduler = new CapacityScheduler(20, queues);
-        for (int j = 0; j < 3000; j++) {
-            for (int i = 0; i < 6000; i++) {
+        for (int j = 0; j < 4; j++) {
+            for (int i = 0; i < 10; i++) {
                 Random random = new Random();
-                Job job1 = new Job(8+random.nextInt(5), 10, 10 + random.nextInt(10),"1");
+                Job job1 = new Job(8+random.nextInt(5), 10, 10 + random.nextInt(10),i+"");
                 scheduler.addJob(queues[0].getName(),job1);
-                Job job2 = new Job(8+random.nextInt(3), 10, 20 + random.nextInt(10),"2");
+                Job job2 = new Job(8+random.nextInt(3), 10, 20 + random.nextInt(10),-i+"");
                 scheduler.addJob(queues[random.nextInt(2)].getName(),job2);
 
-//                System.out.println("test  i-----:"+ i);
-//                System.out.println(SimulateRunning.avgFinishTime());
-
-//                System.out.println(queues[j].getQueueRun().size()+" : "+queues[j].getLeftContainer());
             }
+
             for(int i  = 0;i<4;i++){
                 scheduler = SimulateRunning.run(18,scheduler);
                 System.out.println(SimulateRunning.avgFinishTime());
@@ -41,9 +40,9 @@ public class TestForCapacity {
             for(JobsQueue job: scheduler.getQueueMap().values()){
 
                 System.out.print(job.getName()+" \n" +job.getQueueRun().size()+" :"+job.getAllContainer()+" "+job.getLeftContainer());
-                System.out.print("\n");
+                System.out.print("\njob information\n");
                 for(Job k: job.getQueueRun()){
-                    System.out.print(k.getContainer()+" ");
+                    System.out.println(k.getDelay()+" "+k.getTotaltime());
                 }
                 System.out.println("\n");
                 System.out.println("get used container"+job.getUsedContainer());

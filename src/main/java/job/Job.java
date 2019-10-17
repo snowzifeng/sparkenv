@@ -14,7 +14,7 @@ public class Job implements Comparable<Job> {
     int delay = 0;
     String id;
 
-    public Job(int maxContainer, int basetime, int worktime,String id) {
+    public Job(int maxContainer, int basetime, int worktime, String id) {
         this.basetime = basetime;
         this.maxContainer = maxContainer;
         this.basetime = basetime;
@@ -23,12 +23,28 @@ public class Job implements Comparable<Job> {
         this.worktimeLeft = worktime + basetime;
         this.finishStartPart = false;
         this.container = 0;
-        this.delay = basetime;
+        this.delay = 0;
         this.id = id;
 
 
     }
 
+    @Override
+    public int hashCode() {
+        return id.hashCode();
+    }
+
+    public void setDelay(int delay) {
+        this.delay = delay;
+    }
+
+    public int getDelay() {
+        return delay;
+    }
+
+    public String getId() {
+        return id;
+    }
 
     public int getContainer() {
         return container;
@@ -60,6 +76,7 @@ public class Job implements Comparable<Job> {
     }
 
     public void setContainer(int container) {
+
 //        System.out.println("start : "+this.getWorktimeLeft());
         if (this.finishStartPart) {
             this.fullWorkload = this.worktimeLeft * this.container;
@@ -101,6 +118,7 @@ public class Job implements Comparable<Job> {
         }
 
 
+
     }
 
     public void setMaxContainer(int maxContainer) {
@@ -131,5 +149,21 @@ public class Job implements Comparable<Job> {
 
     public int getTotaltime() {
         return totaltime;
+    }
+
+    public void setTotaltime(int totaltime) {
+        this.totaltime = totaltime;
+    }
+
+    @Override
+    public Job clone() {
+        Job job = new Job(this.maxContainer,this.basetime,this.worktime,this.id);
+        job.setAllocatedcontainer(this.getAllocatedContainer());
+        job.container= this.container;
+        job.setQueueName(this.getQueueName());
+        job.worktimeLeft= this.worktimeLeft;
+        job.setTotaltime(this.getTotaltime());
+        job.setDelay(this.getDelay());
+        return job;
     }
 }
