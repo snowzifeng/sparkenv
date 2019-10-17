@@ -32,7 +32,8 @@ public class ResetHandler implements IHandler {
     private JSONObject resetEnvironment(final ResetArgument resetArgument) {
         sparkEnv.init(0, QueueAdaptionUtil.convert(resetArgument.getQueueArguments()));
         sparkEnv.runEnv(JobAdaptionUtil.convert(resetArgument, modelManager));
-        return sparkEnv.doAction(resetArgument.getStepInterval(), QueueAdaptionUtil.convert(resetArgument.getQueueArguments()));
+        sparkEnv.setStepInterval(resetArgument.getStepInterval());
+        return sparkEnv.doAction(sparkEnv.getStepInterval(), QueueAdaptionUtil.convert(resetArgument.getQueueArguments()));
     }
 
     private ResetArgument parseArguments(final JSONObject data) {
@@ -46,7 +47,7 @@ public class ResetHandler implements IHandler {
             JSONObject object = jsonArray.getJSONObject(i);
             final String appType = object.getString("name");
             final int dataSize = object.getIntValue("dataSize");
-            final int submitInterval = object.getIntValue("interval");
+            final int submitInterval = object.getIntValue("interval") * 1000;
             final String queue = object.getString("queue");
 
             Workload workload = new Workload(appType, dataSize, submitInterval, queue);
