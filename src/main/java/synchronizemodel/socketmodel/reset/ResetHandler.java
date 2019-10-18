@@ -49,8 +49,9 @@ public class ResetHandler implements IHandler {
             final int dataSize = object.getIntValue("dataSize");
             final int submitInterval = object.getIntValue("interval") * 1000;
             final String queue = object.getString("queue");
+            final String jobId = object.getString("id");
 
-            Workload workload = new Workload(appType, dataSize, submitInterval, queue);
+            Workload workload = new Workload(appType, dataSize, submitInterval, queue, jobId);
             workloadList.add(workload);
         }
 

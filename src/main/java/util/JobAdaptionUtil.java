@@ -18,7 +18,8 @@ public class JobAdaptionUtil {
             int interval = workload.getInterval();
             Optional<SparkModel> sparkModelOptional = modelManager.findModel(workload.getAppType(), workload.getDataSize());
             if (sparkModelOptional.isPresent()) {
-                Job job = SparkModelToJobConvertionUtil.convert(sparkModelOptional.get());
+                String jobId = workload.getId();
+                Job job = SparkModelToJobConvertionUtil.convert(sparkModelOptional.get(), jobId);
                 String queue = workload.getQueue();
                 list.add(new TwoTuple<>(interval, new TwoTuple<>(job, queue)));
             }

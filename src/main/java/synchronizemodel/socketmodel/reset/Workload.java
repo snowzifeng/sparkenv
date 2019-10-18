@@ -10,11 +10,14 @@ public class Workload {
 
     private String queue;
 
-    public Workload(String appType, int dataSize, int interval, String queue) {
+    private String id;
+
+    public Workload(String appType, int dataSize, int interval, String queue, String id) {
         this.appType = appType;
         this.dataSize = dataSize;
         this.interval = interval;
         this.queue = queue;
+        this.id = id;
     }
 
     public String getAppType() {
@@ -47,6 +50,10 @@ public class Workload {
 
     public void setQueue(String queue) {
         this.queue = queue;
+    }
+
+    public String getId() {
+        return this.id;
     }
 
 }
