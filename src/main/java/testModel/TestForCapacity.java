@@ -13,23 +13,26 @@ import java.util.Random;
 public class TestForCapacity {
     public static void main(String[] args) {
         JobsQueue[] queues = new JobsQueue[2];
-        queues[0] = new JobsQueue("queueA", 20, 40);
-        queues[1] = new JobsQueue("queueB", 20, 40);
+        queues[0] = new JobsQueue("queueA", 30, 30);
+        queues[1] = new JobsQueue("queueB", 10, 10);
         SparkEnv env = new SparkEnv();
 
         CapacityScheduler scheduler = new CapacityScheduler(20, queues);
-        for (int j = 0; j < 4; j++) {
+        for (int j = 0; j < 1; j++) {
             SimulateRunning.setPredictTime(0);
             for (int i = 0; i < 10; i++) {
-                Random random = new Random();
-                Job job1 = new Job(8+random.nextInt(5), 10, 10 + random.nextInt(10),i+"");
+//                Random random = new Random();
+                Job job1 = new Job(8, 10, 20,i+"");
                 scheduler.addJob(queues[0].getName(),job1);
-                Job job2 = new Job(8+random.nextInt(3), 10, 20 + random.nextInt(10),-i+"");
-                scheduler.addJob(queues[random.nextInt(2)].getName(),job2);
+                Job job2 = new Job(8, 10, 20,-i+"");
+                scheduler.addJob(queues[1].getName(),job2);
 
             }
 
-            for(int i  = 0;i<20;i++){
+            scheduler = SimulateRunning.run(18,scheduler,1);
+            SimulateRunning.printPredictTime();
+            SimulateRunning.setPredictTime(0);
+            for(int i  = 0;i<0;i++){
                 scheduler = SimulateRunning.run(18,scheduler,1);
 //                System.out.println(SimulateRunning.avgFinishTime());
                 SimulateRunning.printPredictTime();

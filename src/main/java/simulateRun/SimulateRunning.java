@@ -386,7 +386,7 @@ public class SimulateRunning {
         for (Job job : finishTemp) {
             finish.add(job);
         }
-        System.out.println("long time 1: --------------" + predictTime);
+//        System.out.println("long time 1: --------------" + predictTime);
         predictTime = 0 - predictTime;
 
     }
@@ -399,7 +399,7 @@ public class SimulateRunning {
             predictTime = -predictTime;
 
         }
-        System.out.println("long time 2: --------------" + predictTime);
+//        System.out.println("long time 2: --------------" + predictTime);
 //        jobInformation = jobs;
         List<JobsQueue> queue = new ArrayList<>(scheduler.getQueueMap().values());
         runTools = new RunTool[queue.size() * 2];

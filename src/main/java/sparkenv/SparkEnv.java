@@ -115,11 +115,14 @@ public class SparkEnv {
         Map<String, JobsQueue> map = scheduler.getQueueMap();
         List<String> queueName = new ArrayList<String>(initmap.keySet());
 
-        if (!queue.isEmpty())
+        if (!queue.isEmpty()) {
             for (int i = 0; i < queueName.size(); i++) {
                 map.get(queueName.get(i)).setAllContainer(queue.get(queueName.get(i)).getFirst());
                 map.get(queueName.get(i)).setMaxContainer(queue.get(queueName.get(i)).getSecond());
             }
+            scheduler.setQueueMap(map);
+        }
+
 
 
         int totaltime = interal;
@@ -130,7 +133,7 @@ public class SparkEnv {
             if (0 < jobInformation.size() && totaltime > 0) {
                 int time = jobInformation.get(0).getFirst();
 
-                scheduler = SimulateRunning.run(time, (CapacityScheduler) scheduler,firstFlag);
+                scheduler = SimulateRunning.run(time, (CapacityScheduler) scheduler, firstFlag);
                 firstFlag++;
 
                 Job job = jobInformation.get(0).getSecond().getFirst();
@@ -139,7 +142,7 @@ public class SparkEnv {
                 totaltime -= time;
             } else {
                 if (jobInformation.isEmpty()) {
-                    scheduler = SimulateRunning.run(totaltime, (CapacityScheduler) scheduler,firstFlag);
+                    scheduler = SimulateRunning.run(totaltime, (CapacityScheduler) scheduler, firstFlag);
                     firstFlag++;
 
                 }

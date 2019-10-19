@@ -23,5 +23,6 @@ public abstract class AbstractScheduler {
     abstract public void addJob(String name, Job job);
     abstract public boolean isEmpty() ;
     abstract public int getAvgTime();
+    public void setQueueMap(Map<String, JobsQueue> queueMap){};
 
 }
