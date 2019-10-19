@@ -19,6 +19,7 @@ public class TestForCapacity {
 
         CapacityScheduler scheduler = new CapacityScheduler(20, queues);
         for (int j = 0; j < 4; j++) {
+            SimulateRunning.setPredictTime(0);
             for (int i = 0; i < 10; i++) {
                 Random random = new Random();
                 Job job1 = new Job(8+random.nextInt(5), 10, 10 + random.nextInt(10),i+"");
@@ -28,9 +29,10 @@ public class TestForCapacity {
 
             }
 
-            for(int i  = 0;i<4;i++){
-                scheduler = SimulateRunning.run(18,scheduler);
-                System.out.println(SimulateRunning.avgFinishTime());
+            for(int i  = 0;i<20;i++){
+                scheduler = SimulateRunning.run(18,scheduler,1);
+//                System.out.println(SimulateRunning.avgFinishTime());
+                SimulateRunning.printPredictTime();
             }
 
             System.out.println("\nstate---------");

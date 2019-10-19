@@ -55,6 +55,7 @@ public class SimulateRunning {
     static CapacityScheduler scheduler;
     static int minTime = 0;
     static int predictTime = 0;
+    static int continueFlag;
 
     private static void resettime(int time) {
 //        System.out.println("enter the resettime");
@@ -102,7 +103,7 @@ public class SimulateRunning {
                 runTools[index].container += runTools[index].jobList_run.get(i).getContainer();
                 runTools[index].jobList_run.get(i).setWorktimeLeft(0);
                 Job job = runTools[index].jobList_run.get(i);
-                if (predictTime != -1) {
+                if (predictTime >= 0) {
                     job.setDelay(predictTime);
                 }
                 finish.add(job);
@@ -276,6 +277,14 @@ public class SimulateRunning {
 
 //    static List<TwoTuple<Integer, TwoTuple<Job, String>>> jobInformation = new LinkedList<TwoTuple<Integer, TwoTuple<Job, String>>>();
 
+    public static void setPredictTime(int time) {
+        predictTime = time;
+    }
+
+    public static void printPredictTime() {
+        System.out.println("predicttime: ============" + predictTime);
+    }
+
     public static void predict() {
 
         runTools[2] = runTools[0].clone();
@@ -377,14 +386,20 @@ public class SimulateRunning {
         for (Job job : finishTemp) {
             finish.add(job);
         }
-        predictTime = -1;
+        System.out.println("long time 1: --------------" + predictTime);
+        predictTime = 0 - predictTime;
 
     }
 
-    public static CapacityScheduler run(int time, CapacityScheduler s) {
-        predictTime = 0;
+    public static CapacityScheduler run(int time, CapacityScheduler s, int flag) {
         scheduler = s;
         container = s.getContainerSize();
+        continueFlag = flag;
+        if (predictTime < 0) {
+            predictTime = -predictTime;
+
+        }
+        System.out.println("long time 2: --------------" + predictTime);
 //        jobInformation = jobs;
         List<JobsQueue> queue = new ArrayList<>(scheduler.getQueueMap().values());
         runTools = new RunTool[queue.size() * 2];
@@ -401,6 +416,7 @@ public class SimulateRunning {
             Collections.sort(runTools[i].jobList_run);
 
         }
+
 
         predict();
         System.out.print("");

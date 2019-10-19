@@ -109,9 +109,6 @@ public class SparkEnv {
 
     }
 
-    public void predictTime() {
-
-    }
 
     public JSONObject doAction(int interal, Map<String, TwoTuple<Integer, Integer>> queue) {
         Map<String, JobsQueue> map = scheduler.getQueueMap();
@@ -126,12 +123,14 @@ public class SparkEnv {
 
         int totaltime = interal;
         List<JobsQueue> queues = new ArrayList<JobsQueue>(map.values());
-
+        int firstFlag = 0;
+        SimulateRunning.setPredictTime(0);
         while (true) {
             if (0 < jobInformation.size() && totaltime > 0) {
                 int time = jobInformation.get(0).getFirst();
 
-                scheduler = SimulateRunning.run(time, (CapacityScheduler) scheduler);
+                scheduler = SimulateRunning.run(time, (CapacityScheduler) scheduler,firstFlag);
+                firstFlag++;
 
                 Job job = jobInformation.get(0).getSecond().getFirst();
                 scheduler.addJob(jobInformation.get(0).getSecond().getSecond(), job);
@@ -139,7 +138,8 @@ public class SparkEnv {
                 totaltime -= time;
             } else {
                 if (jobInformation.isEmpty()) {
-                    scheduler = SimulateRunning.run(totaltime, (CapacityScheduler) scheduler);
+                    scheduler = SimulateRunning.run(totaltime, (CapacityScheduler) scheduler,firstFlag);
+                    firstFlag++;
 
                 }
                 break;
@@ -147,6 +147,7 @@ public class SparkEnv {
             }
 
         }
+        SimulateRunning.setPredictTime(0);
         map = scheduler.getQueueMap();
         List<Job> runJob = new LinkedList<Job>();
         List<Job> waitJob = new LinkedList<Job>();
