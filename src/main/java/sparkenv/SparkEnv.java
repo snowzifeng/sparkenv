@@ -109,7 +109,7 @@ public class SparkEnv {
         }
 
     }
-    public JSONObject predict(List<TwoTuple<Integer, TwoTuple<Job, String>>> jobInformation,Map<String, TwoTuple<Integer, Integer>> queue){
+    public JSONObject predictOnly(List<TwoTuple<Integer, TwoTuple<Job, String>>> jobInformation,Map<String, TwoTuple<Integer, Integer>> queue){
         runEnv(jobInformation);
         JSONObject object = doAction(0,queue);
         return object;
