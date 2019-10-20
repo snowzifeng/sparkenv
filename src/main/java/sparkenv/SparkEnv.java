@@ -109,7 +109,12 @@ public class SparkEnv {
         }
 
     }
+    public JSONObject predict(List<TwoTuple<Integer, TwoTuple<Job, String>>> jobInformation,Map<String, TwoTuple<Integer, Integer>> queue){
+        runEnv(jobInformation);
+        JSONObject object = doAction(0,queue);
+        return object;
 
+    }
 
     public JSONObject doAction(int interal, Map<String, TwoTuple<Integer, Integer>> queue) {
         Map<String, JobsQueue> map = scheduler.getQueueMap();
@@ -117,9 +122,8 @@ public class SparkEnv {
 
         if (!queue.isEmpty()) {
             for (int i = 0; i < queueName.size(); i++) {
-                map.get(queueName.get(i)).setAllContainer(queue.get(queueName.get(i)).getFirst());
                 map.get(queueName.get(i)).setMaxContainer(queue.get(queueName.get(i)).getSecond());
-                map.get(queueName.get(i)).setInitContainer(queue.get(queueName.get(i)).getSecond());
+                map.get(queueName.get(i)).setInitContainer(queue.get(queueName.get(i)).getFirst());
             }
         }
 
