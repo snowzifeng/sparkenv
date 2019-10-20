@@ -55,6 +55,7 @@ public class SimulateRunning {
     static CapacityScheduler scheduler;
     static int minTime = 0;
     static int predictTime = 0;
+    static int basePredictTime = 0;
     static int continueFlag;
 
     private static void resettime(int time) {
@@ -104,7 +105,7 @@ public class SimulateRunning {
                 runTools[index].jobList_run.get(i).setWorktimeLeft(0);
                 Job job = runTools[index].jobList_run.get(i);
                 if (predictTime >= 0) {
-                    job.setDelay(predictTime);
+                    job.setDelay(predictTime+job.getBasetime());
                 }
                 finish.add(job);
                 runTools[index].jobList_run.remove(i);
@@ -357,27 +358,22 @@ public class SimulateRunning {
         runTools[1].jobList_run.clear();
         for (int i = 0; i < runTools[2].jobList_wait.size(); i++) {
             Job job = runTools[2].jobList_wait.get(i);
-            if (map.containsKey(job.getId())) {
-                job.setDelay(map.get(job.getId()).getTotaltime());
-
-            } else {
-                System.out.println("error: " + job.getId());
-            }
+            job.setDelay(map.get(job.getId()).getDelay());
             runTools[0].jobList_wait.add(job);
         }
         for (int i = 0; i < runTools[3].jobList_wait.size(); i++) {
             Job job = runTools[3].jobList_wait.get(i);
-            job.setDelay(map.get(job.getId()).getTotaltime());
+            job.setDelay(map.get(job.getId()).getDelay());
             runTools[1].jobList_wait.add(job);
         }
         for (int i = 0; i < runTools[2].jobList_run.size(); i++) {
             Job job = runTools[2].jobList_run.get(i);
-            job.setDelay(map.get(job.getId()).getTotaltime());
+            job.setDelay(map.get(job.getId()).getDelay());
             runTools[0].jobList_run.add(job);
         }
         for (int i = 0; i < runTools[3].jobList_run.size(); i++) {
             Job job = runTools[3].jobList_run.get(i);
-            job.setDelay(map.get(job.getId()).getTotaltime());
+            job.setDelay(map.get(job.getId()).getDelay());
             runTools[1].jobList_run.add(job);
         }
 
@@ -395,10 +391,12 @@ public class SimulateRunning {
         scheduler = s;
         container = s.getContainerSize();
         continueFlag = flag;
+
         if (predictTime < 0) {
             predictTime = -predictTime;
 
         }
+
 //        System.out.println("long time 2: --------------" + predictTime);
 //        jobInformation = jobs;
         List<JobsQueue> queue = new ArrayList<>(scheduler.getQueueMap().values());
@@ -418,10 +416,6 @@ public class SimulateRunning {
         }
 
 
-        predict();
-        System.out.print("");
-
-
 //        System.out.println("time is :"+time);
         while (time > 0) {
             int minJob = minJob();
@@ -429,6 +423,7 @@ public class SimulateRunning {
                 return scheduler;
             } else
                 wait2runMin();
+
 
 //            System.out.println("pass time:-----"+time);
 //            if (runTools[0].nowContainer < 0 || runTools[1].nowContainer < 0) {
@@ -470,9 +465,16 @@ public class SimulateRunning {
 
             }
         }
+
         if (runTools[0].nowContainer < 0 || runTools[0].nowContainer > 40) {
             System.out.print("");
         }
+
+        basePredictTime = predictTime;
+        predict();
+        predictTime = basePredictTime;
+        System.out.print("");
+
         Map<String, JobsQueue> queueMap = new HashMap<>();
         for (int i = 0; i < queue.size(); i++) {
             queue.get(i).setLeftContainer(runTools[i].container);

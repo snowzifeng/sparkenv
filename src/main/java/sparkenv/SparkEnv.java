@@ -119,8 +119,8 @@ public class SparkEnv {
             for (int i = 0; i < queueName.size(); i++) {
                 map.get(queueName.get(i)).setAllContainer(queue.get(queueName.get(i)).getFirst());
                 map.get(queueName.get(i)).setMaxContainer(queue.get(queueName.get(i)).getSecond());
+                map.get(queueName.get(i)).setInitContainer(queue.get(queueName.get(i)).getSecond());
             }
-            scheduler.setQueueMap(map);
         }
 
 
@@ -140,6 +140,8 @@ public class SparkEnv {
                 scheduler.addJob(jobInformation.get(0).getSecond().getSecond(), job);
                 jobInformation.remove(0);
                 totaltime -= time;
+                scheduler = SimulateRunning.run(0, (CapacityScheduler) scheduler, firstFlag);
+
             } else {
                 if (jobInformation.isEmpty()) {
                     scheduler = SimulateRunning.run(totaltime, (CapacityScheduler) scheduler, firstFlag);

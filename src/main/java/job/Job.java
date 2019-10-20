@@ -75,6 +75,10 @@ public class Job implements Comparable<Job> {
         return worktimeLeft;
     }
 
+    public int getBasetime() {
+        return basetime;
+    }
+
     public void setContainer(int container) {
 
 //        System.out.println("start : "+this.getWorktimeLeft());
