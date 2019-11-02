@@ -13,7 +13,7 @@ import java.util.Random;
 public class TestForCapacity {
     public static void main(String[] args) {
         JobsQueue[] queues = new JobsQueue[2];
-        queues[0] = new JobsQueue("queueA", 30, 30);
+        queues[0] = new JobsQueue("queueA", 20, 22);
         queues[1] = new JobsQueue("queueB", 10, 10);
         SparkEnv env = new SparkEnv();
 
@@ -22,40 +22,46 @@ public class TestForCapacity {
             SimulateRunning.setPredictTime(0);
             for (int i = 0; i < 10; i++) {
 //                Random random = new Random();
-                Job job1 = new Job(8, 10, 20,i+"");
-                scheduler.addJob(queues[0].getName(),job1);
-                Job job2 = new Job(8, 10, 20,-i+"");
-                scheduler.addJob(queues[1].getName(),job2);
+                Job job1 = new Job(16, 10, 20, i + "");
+                scheduler.addJob(queues[0].getName(), job1);
+                Job job2 = new Job(20, 10, 20, -i + "");
+                scheduler.addJob(queues[0].getName(), job2);
 
             }
 
 
-            scheduler = SimulateRunning.run(18,scheduler,1);
+            scheduler = SimulateRunning.run(18, scheduler, 1);
             SimulateRunning.printPredictTime();
             SimulateRunning.setPredictTime(0);
-            for(int i  = 0;i<0;i++){
-                scheduler = SimulateRunning.run(18,scheduler,1);
+            int end = 0;
+            for (int i = 0; i < 100; i++) {
+                scheduler = SimulateRunning.run(18, scheduler, 1);
 //                System.out.println(SimulateRunning.avgFinishTime());
-                SimulateRunning.printPredictTime();
-            }
+//                SimulateRunning.printPredictTime();
+                end++;
 
-            System.out.println("\nstate---------");
-            System.out.println("avg: "+scheduler.getAvgTime());
+                System.out.println("\nstate---------");
+                System.out.println("avg: " + scheduler.getAvgTime());
 
 
-            for(JobsQueue job: scheduler.getQueueMap().values()){
+                for (JobsQueue job : scheduler.getQueueMap().values()) {
 
-                System.out.print(job.getName()+" \n" +job.getQueueRun().size()+" :"+job.getAllContainer()+" "+job.getLeftContainer());
-                System.out.print("\njob information\n");
-                for(Job k: job.getQueueRun()){
-                    System.out.println(k.getDelay()+" "+k.getTotaltime());
+                    System.out.print(job.getName() + " \n" + job.getQueueRun().size() + " :" + job.getAllContainer() + " " + job.getLeftContainer());
+                    System.out.print("\njob information\n");
+                    for (Job k : job.getQueueRun()) {
+                        System.out.println(k.getDelay() + " " + k.getTotaltime());
+                    }
+                    System.out.println("\n");
+                    System.out.println("get used container" + job.getUsedContainer());
+                    System.out.println("get left container" + job.getLeftContainer());
+                    System.out.println("get all container" + job.getAllContainer());
+                    if (job.getUsedContainer() == 0) end = -end;
+                    break;
                 }
-                System.out.println("\n");
-                System.out.println("get used container"+job.getUsedContainer());
-                System.out.println("get left container"+job.getLeftContainer());
-                System.out.println("get all container"+job.getAllContainer());
-
-
+                if (end < 0) {
+                    System.out.println("end: ----------------"+end);
+                    break;
+                }
             }
         }
 

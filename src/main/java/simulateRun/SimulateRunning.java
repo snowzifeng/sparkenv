@@ -94,6 +94,10 @@ public class SimulateRunning {
 //        if (runTools[0].nowContainer < 0 || runTools[1].nowContainer < 0) {
 //            System.out.print("");
 //        }
+        if (runTools[index].nowContainer > runTools[index].maxContainer) {
+            runTools[index].container = runTools[index].maxContainer - runTools[index].nowContainer;
+            runTools[index].nowContainer = runTools[index].maxContainer;
+        }
         Collections.sort(runTools[index].jobList_run);
         for (int i = 0; i < runTools[index].jobList_run.size() - flag; i++) {
 
@@ -105,7 +109,7 @@ public class SimulateRunning {
                 runTools[index].jobList_run.get(i).setWorktimeLeft(0);
                 Job job = runTools[index].jobList_run.get(i);
                 if (predictTime >= 0) {
-                    job.setDelay(predictTime+job.getBasetime());
+                    job.setDelay(predictTime + job.getBasetime());
                 }
                 finish.add(job);
                 runTools[index].jobList_run.remove(i);
@@ -113,7 +117,6 @@ public class SimulateRunning {
             } else {
                 runTools[index].jobList_run.get(i).setWorktimeLeft(temp);
             }
-
         }
         if (!runTools[index].jobList_run.isEmpty()) {
             Job job = runTools[index].jobList_run.get(runTools[index].jobList_run.size() - 1);
@@ -311,7 +314,6 @@ public class SimulateRunning {
             System.out.print("");
             dojob(minTime, 1);
 
-
             if (runTools[0].jobList_run.isEmpty() && runTools[0].jobList_wait.isEmpty() && runTools[1].jobList_run.isEmpty() && runTools[1].jobList_wait.isEmpty()) {
                 break;
             }
@@ -412,12 +414,17 @@ public class SimulateRunning {
             runTools[i].jobList_run = queue.get(i).getQueueRun();
             runTools[i].jobList_wait = queue.get(i).getQueueWait();
             Collections.sort(runTools[i].jobList_run);
+            if (runTools[i].nowContainer > runTools[i].maxContainer) {
+                runTools[i].container = runTools[i].maxContainer - runTools[i].nowContainer;
+                runTools[i].nowContainer = runTools[i].maxContainer;
+            }
 
         }
 
 
 //        System.out.println("time is :"+time);
         while (time > 0) {
+
             int minJob = minJob();
             if (minJob == -1) {
                 return scheduler;
@@ -466,9 +473,9 @@ public class SimulateRunning {
             }
         }
 
-        if (runTools[0].nowContainer < 0 || runTools[0].nowContainer > 40) {
-            System.out.print("");
-        }
+//        if (runTools[0].nowContainer < 0 || runTools[0].nowContainer > 40) {
+//            System.out.print("");
+//        }
 
         basePredictTime = predictTime;
         predict();
@@ -536,7 +543,10 @@ public class SimulateRunning {
 
         for (int i = 0; i < 2; i++) {
 //            checkRun();
-
+            if (runTools[i].nowContainer > runTools[i].maxContainer) {
+                runTools[i].container = runTools[i].maxContainer - runTools[i].nowContainer;
+                runTools[i].nowContainer = runTools[i].maxContainer;
+            }
             if (runTools[i].jobList_run.isEmpty()) {
                 if (runTools[i].jobList_wait.isEmpty()) {
                     times[i] = time;
@@ -681,6 +691,15 @@ public class SimulateRunning {
 //            System.out.print("");
 //        if (runTools[0].jobList_run.size() == 2 && runTools[0].container >= 8)
 //            System.out.print("");
+        int flag = 0;
+        for (int index = 0; index < 2; index++) {
+            if (runTools[index].nowContainer > runTools[index].maxContainer) {
+                runTools[index].container = runTools[index].maxContainer - runTools[index].nowContainer;
+                runTools[index].nowContainer = runTools[index].maxContainer;
+                flag = 1;
+            }
+
+        }
         if (runTools[0].container < 0) {
             if (runTools[1].container > 0 && runTools[0].nowContainer < runTools[0].initContainer) {
                 runTools[0].container += runTools[1].container;
@@ -697,19 +716,25 @@ public class SimulateRunning {
                 runTools[1].nowContainer += runTools[0].container;
                 runTools[0].nowContainer -= runTools[0].container;
                 runTools[0].container = 0;
-
             }
             return;
-        } else {
-            for (int i = 0; i < 2; i++) {
-                int sum = runTools[i].nowContainer;
-                for (Job job : runTools[i].jobList_run) {
-                    sum -= job.getContainer();
-                }
-                if (sum != runTools[i].container) {
-                    runTools[i].container = sum;
-                }
+        }
+
+        for (int i = 0; i < 2; i++) {
+            int sum = runTools[i].nowContainer;
+            for (Job job : runTools[i].jobList_run) {
+                sum -= job.getContainer();
             }
+            if (sum != runTools[i].container) {
+                runTools[i].container = sum;
+            }
+            if (sum < 0) {
+                flag = 1;
+            }
+
+        }
+        if (flag == 1) {
+            return;
         }
 //        for (int i = 0; i < 2; i++) {
 //            if (runTools[i].jobList_run.isEmpty()) {
@@ -946,8 +971,8 @@ public class SimulateRunning {
 
             int addContainer = runTools[max].container;
 
-            if (runTools[min].container > 0) {
-                addContainer += runTools[min].container;
+            if (runTools[min].container > 0 && runTools[max].nowContainer < runTools[max].maxContainer) {
+                addContainer += Math.min(runTools[min].container, runTools[max].maxContainer - runTools[max].nowContainer);
             }
             int orgin = addContainer;
 

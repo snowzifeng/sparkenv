@@ -46,6 +46,7 @@ public class SparkEnv {
             case 2:
 
             default:
+                scheduler = new CapacityScheduler(fullContainer, jobsQueues);
                 break;
         }
     }
