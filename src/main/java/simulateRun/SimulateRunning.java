@@ -57,6 +57,14 @@ public class SimulateRunning {
     static int predictTime = 0;
     static int basePredictTime = 0;
     static int continueFlag;
+    static int finishJobNumber = 0;
+
+    public static void resetFinshNumber(){
+        finishJobNumber=0;
+    }
+    public static int getFinishJobNumber(){
+        return finishJobNumber;
+    }
 
     private static void resettime(int time) {
 //        System.out.println("enter the resettime");
@@ -112,6 +120,7 @@ public class SimulateRunning {
                     job.setDelay(predictTime + job.getBasetime());
                 }
                 finish.add(job);
+                finishJobNumber++;
                 runTools[index].jobList_run.remove(i);
                 i--;
             } else {
@@ -290,7 +299,7 @@ public class SimulateRunning {
     }
 
     public static void predict() {
-
+        int tempFinishNumber = finishJobNumber;
         runTools[2] = runTools[0].clone();
         runTools[3] = runTools[1].clone();
 //        System.out.println("before clone");
@@ -386,6 +395,7 @@ public class SimulateRunning {
         }
 //        System.out.println("long time 1: --------------" + predictTime);
         predictTime = 0 - predictTime;
+        finishJobNumber= tempFinishNumber;
 
     }
 
