@@ -13,18 +13,18 @@ import java.util.Random;
 public class TestForCapacity {
     public static void main(String[] args) {
         JobsQueue[] queues = new JobsQueue[2];
-        queues[0] = new JobsQueue("queueA", 20, 22);
+        queues[0] = new JobsQueue("queueA", 10, 10);
         queues[1] = new JobsQueue("queueB", 10, 10);
         SparkEnv env = new SparkEnv();
 
         CapacityScheduler scheduler = new CapacityScheduler(20, queues);
         for (int j = 0; j < 1; j++) {
             SimulateRunning.setPredictTime(0);
-            for (int i = 0; i < 10; i++) {
+            for (int i = 0; i < 100; i++) {
 //                Random random = new Random();
-                Job job1 = new Job(16, 10, 20, i + "");
+                Job job1 = new Job(16, 5, 20, i + "");
                 scheduler.addJob(queues[0].getName(), job1);
-                Job job2 = new Job(20, 10, 20, -i + "");
+                Job job2 = new Job(20, 5, 20, -i + "");
                 scheduler.addJob(queues[0].getName(), job2);
 
             }
@@ -34,7 +34,7 @@ public class TestForCapacity {
             SimulateRunning.printPredictTime();
             SimulateRunning.setPredictTime(0);
             int end = 0;
-            for (int i = 0; i < 100; i++) {
+            for (int i = 0; i < 1000; i++) {
                 scheduler = SimulateRunning.run(18, scheduler, 1);
 //                System.out.println(SimulateRunning.avgFinishTime());
 //                SimulateRunning.printPredictTime();
