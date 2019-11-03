@@ -37,9 +37,7 @@ public class Controller {
     }
 
     private void start() {
-        for (SocketServer server : socketServerList) {
-            server.start();
-        }
+        socketServerList.forEach(SocketServer::start);
     }
 
     private void registerSocketServer(final SocketServer socketServer) {

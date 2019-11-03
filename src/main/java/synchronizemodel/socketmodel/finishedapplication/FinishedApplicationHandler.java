@@ -9,7 +9,7 @@ public class FinishedApplicationHandler implements IHandler {
     @Override
     public JSONObject handle(JSONObject data) {
         JSONObject object = new JSONObject();
-        object.put("timeCost", SimulateRunning.avgFinishTime());
+        object.put("finishedJobNumber", SimulateRunning.getFinishJobNumber());
         return object;
     }
 

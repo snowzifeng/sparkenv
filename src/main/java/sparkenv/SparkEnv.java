@@ -30,6 +30,7 @@ public class SparkEnv {
         this.fullContainer = fullContainer;
         this.initmap = queue;
         SimulateRunning.resetFinish();
+        SimulateRunning.resetFinshNumber();
         this.chooseScheduler = chooseScheduler;
 
         for (int i = 0; i < queueName.size(); i++) {
